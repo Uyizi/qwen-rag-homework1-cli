@@ -1,0 +1,17 @@
+config.json
+.env
+.env.*
+.venv/
+venv/
+__pycache__/
+*.pyc
+logs/
+models/
+artifacts/*
+!artifacts/chunks.json
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.zip
+*.bak

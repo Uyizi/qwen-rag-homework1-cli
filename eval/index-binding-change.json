@@ -1,0 +1,13 @@
+{
+  "reason": "PDF完整表格新增检索单元，只更新标准证据的等价编号集合，不改问题、答案、审核状态。跨片段题的正文条件仍保留必要。",
+  "tables": {
+    "Table I": "HAGNN论文.pdf::tI",
+    "Table II": "HAGNN论文.pdf::tII",
+    "Table III": "HAGNN论文.pdf::tIII",
+    "Table IV": "HAGNN论文.pdf::tIV",
+    "Table V": "HAGNN论文.pdf::tV",
+    "Table VI": "HAGNN论文.pdf::tVI"
+  },
+  "question_answers_unchanged": true,
+  "extra_context_reported_separately": true
+}

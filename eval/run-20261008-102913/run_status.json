@@ -1,0 +1,7 @@
+{
+  "complete": true,
+  "rows_saved": 40,
+  "human_scoring": "final_user_authorized_ai_review_with_user_spot_checks",
+  "implementation": "structured-tables-citation-only-v4.3",
+  "scoring_provenance": "scoring-provenance.json"
+}

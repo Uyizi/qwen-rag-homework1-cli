@@ -1,0 +1,14 @@
+{
+  "wsl_python": "",
+  "generation_model": "",
+  "embedding_model": "",
+  "chunk_chars": 420,
+  "overlap_chars": 60,
+  "top_k": 3,
+  "max_new_tokens": 768,
+  "default_document": "HAGNN论文.pdf",
+  "exclude_references": true,
+  "translate_queries": true,
+  "implementation_version": "structured-tables-citation-only-v4.3",
+  "neighbor_chunks": 1
+}

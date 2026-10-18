@@ -1,0 +1,72 @@
+{
+  "run": "run-20261008-102913",
+  "human_scoring": "user_spot_checks_with_authorized_ai_review",
+  "methods": {
+    "bm25": {
+      "n": 20,
+      "hit_at_3": 13,
+      "answerable_n": 15,
+      "retrieval_hit_rate": 0.8666666666666667,
+      "all_evidence_hits": 10,
+      "context_all_evidence_hits": 15,
+      "mean_first_complete_answer_seconds": 4.95472,
+      "median_first_complete_answer_seconds": 4.219849999999999,
+      "mean_query_translation_seconds": 1.40316,
+      "query_translation_statuses": {
+        "translated": 20
+      },
+      "statuses": {
+        "answered": 14,
+        "refused": 5,
+        "rejected": 1
+      },
+      "by_type": {
+        "answerable": {
+          "answered": 10
+        },
+        "unanswerable": {
+          "refused": 4,
+          "rejected": 1
+        },
+        "multihop": {
+          "answered": 4,
+          "refused": 1
+        }
+      }
+    },
+    "vector": {
+      "n": 20,
+      "hit_at_3": 13,
+      "answerable_n": 15,
+      "retrieval_hit_rate": 0.8666666666666667,
+      "all_evidence_hits": 10,
+      "context_all_evidence_hits": 15,
+      "mean_first_complete_answer_seconds": 5.6964749999999995,
+      "median_first_complete_answer_seconds": 4.4181,
+      "mean_query_translation_seconds": 1.3953,
+      "query_translation_statuses": {
+        "translated": 20
+      },
+      "statuses": {
+        "answered": 15,
+        "refused": 5
+      },
+      "by_type": {
+        "answerable": {
+          "answered": 10
+        },
+        "unanswerable": {
+          "refused": 5
+        },
+        "multihop": {
+          "answered": 5
+        }
+      }
+    }
+  },
+  "implementation": "structured-tables-citation-only-v4.3",
+  "retrieval_unit_change": "six whole PDF tables appended; original text IDs retained; equivalent source bindings recorded",
+  "context_metrics": "same-page neighbors, explicit sections and symbols; excluded from Top-3 counts",
+  "generation_model_variant": "Qwen3.5-4B-Dense-style-v1; merged personal style adapter",
+  "custom_moe_architecture_evaluated": false
+}

@@ -1,0 +1,64 @@
+{
+  "ready": true,
+  "transport": "direct local engine",
+  "corpus": {
+    "documents": 3,
+    "chunks": 76,
+    "chinese_characters": 4007,
+    "default_document": "HAGNN论文.pdf",
+    "files": [
+      {
+        "file": "HAGNN论文.pdf",
+        "chinese_characters": 0,
+        "size": 321766,
+        "mtime_ns": 1790135965452449200
+      },
+      {
+        "file": "文档问答系统设计.txt",
+        "chinese_characters": 1137,
+        "size": 3895,
+        "mtime_ns": 1790770342936341900
+      },
+      {
+        "file": "软件设计学习笔记.md",
+        "chinese_characters": 2870,
+        "size": 10822,
+        "mtime_ns": 1790770342936341900
+      }
+    ],
+    "vector_cache_reused": true,
+    "body_chunks": 63,
+    "references_chunks": 13,
+    "structured_tables": 6
+  },
+  "environment": {
+    "ready": true,
+    "model": "/mnt/d/ai_project_data/qwen35_cloud/exports/Qwen3.5-4B-Dense-style-v1",
+    "embedding_model": "/mnt/d/ai_project_data/qwen35_cloud/base/multilingual-e5-small",
+    "embedding_dimension": 384,
+    "torch": "2.14.0+cu130",
+    "transformers": "5.17.0",
+    "python": "3.13.11",
+    "gpu": "NVIDIA GeForce RTX 5080 Laptop GPU",
+    "load_seconds": 141.158,
+    "dtype": "bfloat16",
+    "decoding": "greedy; thinking disabled"
+  },
+  "configuration": {
+    "wsl_python": "/home/uyizi/ai_project/.venv-qwen35/bin/python",
+    "generation_model": "/mnt/d/ai_project_data/qwen35_cloud/exports/Qwen3.5-4B-Dense-style-v1",
+    "embedding_model": "/mnt/d/ai_project_data/qwen35_cloud/base/multilingual-e5-small",
+    "chunk_chars": 420,
+    "overlap_chars": 60,
+    "top_k": 3,
+    "max_new_tokens": 768,
+    "port": 8766,
+    "default_document": "HAGNN论文.pdf",
+    "record_cli_demo": false,
+    "exclude_references": true,
+    "translate_queries": true,
+    "implementation_version": "structured-tables-citation-only-v4.3",
+    "neighbor_chunks": 1
+  },
+  "evaluation_role": "post-fix retest on the same approved questions"
+}

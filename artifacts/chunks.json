@@ -1,0 +1,1331 @@
+[
+  {
+    "id": "HAGNN论文.pdf::c001",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 1,
+    "start_char": 0,
+    "end_char": 373,
+    "text": "Optimizing Adaptive Context in Hierarchy Aware\nGraph Neural Networks\nChenjie Yin\nXi’an Jiaotong University\n2244413949@stu.xjtu.edu.cn\nAbstract—Graph neural networks (GNNs) are effective for\nlearning relational data. However, standard GNNs rely on local\nmessage passing that cannot capture long range hierarchical\ncontext, while unconstrained expansion introduces noise and",
+    "section": "body",
+    "retrieval_text": "Optimizing Adaptive Context in Hierarchy Aware Graph Neural Networks Chenjie Yin Xi’an Jiaotong University 2244413949@stu.xjtu.edu.cn Abstract—Graph neural networks (GNNs) are effective for learning relational data. However, standard GNNs rely on local message passing that cannot capture long range hierarchical context, while unconstrained expansion introduces noise and"
+  },
+  {
+    "id": "HAGNN论文.pdf::c002",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 2,
+    "start_char": 313,
+    "end_char": 680,
+    "text": "context, while unconstrained expansion introduces noise and\nscalability issues. We study an optimized Adaptive Hierarchy\naware Graph Neural Network (AHGNN) that pre serves direction\nduring hierarchy estimation, constrains topology expansion with\ndepth limited Breadth First Search (BFS) and a hierarchy gap\ncondition, and uses sparse operators for stable large graph",
+    "section": "body",
+    "retrieval_text": "context, while unconstrained expansion introduces noise and scalability issues. We study an optimized Adaptive Hierarchy aware Graph Neural Network (AHGNN) that pre serves direction during hierarchy estimation, constrains topology expansion with depth limited Breadth First Search (BFS) and a hierarchy gap condition, and uses sparse operators for stable large graph"
+  },
+  {
+    "id": "HAGNN论文.pdf::c003",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 3,
+    "start_char": 620,
+    "end_char": 1028,
+    "text": "condition, and uses sparse operators for stable large graph\naggregation. Experiments on Cora, Citeseer, PubMed, and WikiCS\nshow consistent gains over local baselines, with up to 2.0second\nbest node classification accuracy on three of four datasets.\nKeywords—Graph neural networks; adaptive context construc-\ntion; directed graphs; hierarchy-aware learning; depth-limited\nBFS; link prediction\nI. INTRODUCTION",
+    "section": "body",
+    "retrieval_text": "condition, and uses sparse operators for stable large graph aggregation. Experiments on Cora, Citeseer, PubMed, and WikiCS show consistent gains over local baselines, with up to 2.0second best node classification accuracy on three of four datasets. Keywords—Graph neural networks; adaptive context construc- tion; directed graphs; hierarchy-aware learning; depth-limited BFS; link prediction I. INTRODUCTION"
+  },
+  {
+    "id": "HAGNN论文.pdf::c004",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 4,
+    "start_char": 968,
+    "end_char": 1334,
+    "text": "earning; depth-limited\nBFS; link prediction\nI. INTRODUCTION\nGraph neural networks (GNNs) effectively convert graph\ninteractions into representations that reflect both attributes and\nstructure, yet standard local message passing is poorly matched\nto sparse directed graphs with hierarchical structure. A node\nmay also play a different role depending on whether it is",
+    "section": "body",
+    "retrieval_text": "earning; depth-limited BFS; link prediction I. INTRODUCTION Graph neural networks (GNNs) effectively convert graph interactions into representations that reflect both attributes and structure, yet standard local message passing is poorly matched to sparse directed graphs with hierarchical structure. A node may also play a different role depending on whether it is"
+  },
+  {
+    "id": "HAGNN论文.pdf::c005",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 5,
+    "start_char": 1274,
+    "end_char": 1664,
+    "text": "e\nmay also play a different role depending on whether it is\nstructurally upstream or downstream. Standard message passing\nis not tailored for this case. It is less reliable when the graph\ncontains long range dependencies and role differences that are\ntied to direction.\nExpanding the search space can recover distant context, but\nunconstrained expansion introduces noisy shortcuts, weakens",
+    "section": "body",
+    "retrieval_text": "e may also play a different role depending on whether it is structurally upstream or downstream. Standard message passing is not tailored for this case. It is less reliable when the graph contains long range dependencies and role differences that are tied to direction. Expanding the search space can recover distant context, but unconstrained expansion introduces noisy shortcuts, weakens"
+  },
+  {
+    "id": "HAGNN论文.pdf::c006",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 6,
+    "start_char": 1604,
+    "end_char": 1991,
+    "text": "unconstrained expansion introduces noisy shortcuts, weakens\nhierarchy, and increases cost. On larger sparse graphs, the same\nprocess also increases the computational burden and makes\nthe model harder to train. The key challenge is therefore to\nretain useful long range context without sacrificing structural\nfidelity or scalability.\nThis paper addresses that problem by adaptive context",
+    "section": "body",
+    "retrieval_text": "unconstrained expansion introduces noisy shortcuts, weakens hierarchy, and increases cost. On larger sparse graphs, the same process also increases the computational burden and makes the model harder to train. The key challenge is therefore to retain useful long range context without sacrificing structural fidelity or scalability. This paper addresses that problem by adaptive context"
+  },
+  {
+    "id": "HAGNN论文.pdf::c007",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 7,
+    "start_char": 1931,
+    "end_char": 2326,
+    "text": "lity.\nThis paper addresses that problem by adaptive context\nconstruction.The model keeps the directed graph for hierarchy\nestimation, restricts topology search through a constrained\nBFS, and only retains context that remains consistent with the\ninferred hierarchy. Sparse operators further keep the method\npractical on large graphs.\nTo summarize, the contributions of this paper are as follows:",
+    "section": "body",
+    "retrieval_text": "lity. This paper addresses that problem by adaptive context construction.The model keeps the directed graph for hierarchy estimation, restricts topology search through a constrained BFS, and only retains context that remains consistent with the inferred hierarchy. Sparse operators further keep the method practical on large graphs. To summarize, the contributions of this paper are as follows:"
+  },
+  {
+    "id": "HAGNN论文.pdf::c008",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 8,
+    "start_char": 2266,
+    "end_char": 2649,
+    "text": "summarize, the contributions of this paper are as follows:\n1) We show that hierarchy estimation depends on preserving\nthe directed graph.\n2) We introduce a constrained adaptive context mechanism\nbased on depth limited BFS.\n3) We demonstrate that sparse operators keep AHGNN\nscalable to graphs with over 200K edges without sac-\nrificing accuracy, validated across four benchmarks on",
+    "section": "body",
+    "retrieval_text": "summarize, the contributions of this paper are as follows: 1) We show that hierarchy estimation depends on preserving the directed graph. 2) We introduce a constrained adaptive context mechanism based on depth limited BFS. 3) We demonstrate that sparse operators keep AHGNN scalable to graphs with over 200K edges without sac- rificing accuracy, validated across four benchmarks on"
+  },
+  {
+    "id": "HAGNN论文.pdf::c009",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 9,
+    "start_char": 2589,
+    "end_char": 3005,
+    "text": "sac-\nrificing accuracy, validated across four benchmarks on\nnode classification and link prediction.\nII. RELATED WORK\nMost GNNs, including GCN [1] and GAT [2], rely on local\nmessage passing. Methods such as APPNP [7], GPR-GNN [8],\nand FAGCN [9] enlarge or adapt propagation, but broader\npropagation is helpful only when irrelevant structure is filtered.\nHierarchy aware learning offers a stronger prior for directed",
+    "section": "body",
+    "retrieval_text": "sac- rificing accuracy, validated across four benchmarks on node classification and link prediction. II. RELATED WORK Most GNNs, including GCN [1] and GAT [2], rely on local message passing. Methods such as APPNP [7], GPR-GNN [8], and FAGCN [9] enlarge or adapt propagation, but broader propagation is helpful only when irrelevant structure is filtered. Hierarchy aware learning offers a stronger prior for directed"
+  },
+  {
+    "id": "HAGNN论文.pdf::c010",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 10,
+    "start_char": 2945,
+    "end_char": 3307,
+    "text": "erarchy aware learning offers a stronger prior for directed\ngraphs. SpringRank based AHGNN [10] uses hierarchy to guide\ncontext, but its unconstrained topology search remains noisy\nand costly. Pooling methods [11]–[13], graph transformers [14]–\n[18], scalable GNNs [19], and directed models such as\nMagNet [20] address complementary aspects of global structure,",
+    "section": "body",
+    "retrieval_text": "erarchy aware learning offers a stronger prior for directed graphs. SpringRank based AHGNN [10] uses hierarchy to guide context, but its unconstrained topology search remains noisy and costly. Pooling methods [11]–[13], graph transformers [14]– [18], scalable GNNs [19], and directed models such as MagNet [20] address complementary aspects of global structure,"
+  },
+  {
+    "id": "HAGNN论文.pdf::c011",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 11,
+    "start_char": 3247,
+    "end_char": 3667,
+    "text": "Net [20] address complementary aspects of global structure,\nefficiency, or direction. Our method combines these motivations\nby preserving direction while constraining long range expansion\nwith explicit depth and hierarchy gap rules.\nIII. METHODOLOGY\nLet G = (V, E) denote a graph with adjacency matrix A. Let\ns = [s1, . . . , sN]T ∈RN be the vector of SpringRank scores.\nThe model estimates s by minimizing\nH(s) =\nX\ni,j",
+    "section": "body",
+    "retrieval_text": "Net [20] address complementary aspects of global structure, efficiency, or direction. Our method combines these motivations by preserving direction while constraining long range expansion with explicit depth and hierarchy gap rules. III. METHODOLOGY Let G = (V, E) denote a graph with adjacency matrix A. Let s = [s1, . . . , sN]T ∈RN be the vector of SpringRank scores. The model estimates s by minimizing H(s) = X i,j"
+  },
+  {
+    "id": "HAGNN论文.pdf::c012",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 12,
+    "start_char": 3607,
+    "end_char": 4003,
+    "text": "nk scores.\nThe model estimates s by minimizing\nH(s) =\nX\ni,j\nAij\n1\n2(si −sj −1)2 + α\n2\nX\ni\ns2\ni\n(1)\nα is a regularization parameter. Setting the derivative to zero\nyields\n\u0002\nDin + Dout −(A + AT ) + αI\n\u0003\ns = (Dout −Din)1,\n(2)\nwhere Din and Dout are the diagonal in-degree and out-\ndegree matrices and 1 ∈RN is the all-ones vector. Although\nA + AT appears in the coefficient matrix, the graph is not",
+    "section": "body",
+    "retrieval_text": "nk scores. The model estimates s by minimizing H(s) = X i,j Aij 1 2(si −sj −1)2 + α 2 X i s2 i (1) α is a regularization parameter. Setting the derivative to zero yields \u0002 Din + Dout −(A + AT ) + αI \u0003 s = (Dout −Din)1, (2) where Din and Dout are the diagonal in-degree and out- degree matrices and 1 ∈RN is the all-ones vector. Although A + AT appears in the coefficient matrix, the graph is not"
+  },
+  {
+    "id": "HAGNN论文.pdf::c013",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 13,
+    "start_char": 3943,
+    "end_char": 4305,
+    "text": "A + AT appears in the coefficient matrix, the graph is not\nsymmetrized before hierarchy estimation; this term follows\nfrom the optimality condition of directed SpringRank, while\nasymmetry is preserved by (Dout −Din)1 computed from the\noriginal A. Throughout the paper, si and sj denote node scores,\nand edge wise discrepancy is defined separately. Symmetrizing",
+    "section": "body",
+    "retrieval_text": "A + AT appears in the coefficient matrix, the graph is not symmetrized before hierarchy estimation; this term follows from the optimality condition of directed SpringRank, while asymmetry is preserved by (Dout −Din)1 computed from the original A. Throughout the paper, si and sj denote node scores, and edge wise discrepancy is defined separately. Symmetrizing"
+  },
+  {
+    "id": "HAGNN论文.pdf::c014",
+    "file": "HAGNN论文.pdf",
+    "location": "第 1 页",
+    "chunk": 14,
+    "start_char": 4245,
+    "end_char": 4582,
+    "text": "d edge wise discrepancy is defined separately. Symmetrizing\nthe graph before ranking would flatten the hierarchy and weaken\nthe context signal.\nA. Hierarchical Estimation on Directed Graphs\nThe hierarchy stage keeps the original asymmetric adjacency\nmatrix A̸ = AT . For each directed edge (i, j), define the\nresidual\nrij = si −sj −1\n(3)",
+    "section": "body",
+    "retrieval_text": "d edge wise discrepancy is defined separately. Symmetrizing the graph before ranking would flatten the hierarchy and weaken the context signal. A. Hierarchical Estimation on Directed Graphs The hierarchy stage keeps the original asymmetric adjacency matrix A̸ = AT . For each directed edge (i, j), define the residual rij = si −sj −1 (3)"
+  },
+  {
+    "id": "HAGNN论文.pdf::c015",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 15,
+    "start_char": 0,
+    "end_char": 385,
+    "text": "TABLE I\nIMPACT OF BFS DEPTH (k) ON AHGNN PERFORMANCE\nTask\nDepth\nCora\nPubMed\nWikiCS\nNode Class.\n(Acc %)\nk = 1\n82.3\n79.2\n76.8\nk = 2\n83.2\n80.2\n77.5\nk = 3\n81.1\n78.6\nOOM\nk = 4\n78.5\n76.4\nOOM\nk = 5\n75.3\nOOM\nOOM\nLink Pred.\n(AUC %)\nk = 1\n94.1\n97.0\n95.5\nk = 2\n95.6\n98.5\n97.2\nk = 3\n93.5\n96.2\nOOM\nk = 4\n90.2\n93.8\nOOM\nk = 5\n88.4\nOOM\nOOM\nwhich measures deviation from the ideal relation si −sj = 1.",
+    "section": "body",
+    "retrieval_text": "TABLE I IMPACT OF BFS DEPTH (k) ON AHGNN PERFORMANCE Task Depth Cora PubMed WikiCS Node Class. (Acc %) k = 1 82.3 79.2 76.8 k = 2 83.2 80.2 77.5 k = 3 81.1 78.6 OOM k = 4 78.5 76.4 OOM k = 5 75.3 OOM OOM Link Pred. (AUC %) k = 1 94.1 97.0 95.5 k = 2 95.6 98.5 97.2 k = 3 93.5 96.2 OOM k = 4 90.2 93.8 OOM k = 5 88.4 OOM OOM which measures deviation from the ideal relation si −sj = 1."
+  },
+  {
+    "id": "HAGNN论文.pdf::c016",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 16,
+    "start_char": 325,
+    "end_char": 720,
+    "text": "hich measures deviation from the ideal relation si −sj = 1.\nLarger si indicates a more upstream node. We also define\nhierarchical depth as\ndi = −si,\n(4)\nso larger di indicates a more downstream node.\nTo measure node-level hierarchy fit, define\nψout\ni\n= 1\n2\nX\nj\nAijr2\nij,\nψin\ni\n= 1\n2\nX\nj\nAjir2\nji,\n(5)\nψi = ψout\ni\n+ ψin\ni\n+ α\n2 s2\ni .\n(6)\nHere ψout\ni\nand ψin\ni\nmeasure mismatch from outgoing and",
+    "section": "body",
+    "retrieval_text": "hich measures deviation from the ideal relation si −sj = 1. Larger si indicates a more upstream node. We also define hierarchical depth as di = −si, (4) so larger di indicates a more downstream node. To measure node-level hierarchy fit, define ψout i = 1 2 X j Aijr2 ij, ψin i = 1 2 X j Ajir2 ji, (5) ψi = ψout i + ψin i + α 2 s2 i . (6) Here ψout i and ψin i measure mismatch from outgoing and"
+  },
+  {
+    "id": "HAGNN论文.pdf::c017",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 17,
+    "start_char": 660,
+    "end_char": 1078,
+    "text": "6)\nHere ψout\ni\nand ψin\ni\nmeasure mismatch from outgoing and\nincoming edges, while the regularization term stabilizes weakly\nconnected nodes. Because A is asymmetric, the two terms are\ngenerally different.\nHigh score nodes act as upstream authorities. The remaining\nissue is how to connect them to ordinary nodes without adding\nnoisy links.\nB. Depth Limited BFS\nThe key is to restrict the search space. Naive BFS grows",
+    "section": "body",
+    "retrieval_text": "6) Here ψout i and ψin i measure mismatch from outgoing and incoming edges, while the regularization term stabilizes weakly connected nodes. Because A is asymmetric, the two terms are generally different. High score nodes act as upstream authorities. The remaining issue is how to connect them to ordinary nodes without adding noisy links. B. Depth Limited BFS The key is to restrict the search space. Naive BFS grows"
+  },
+  {
+    "id": "HAGNN论文.pdf::c018",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 18,
+    "start_char": 1018,
+    "end_char": 1397,
+    "text": "FS\nThe key is to restrict the search space. Naive BFS grows\nrapidly, introduces noisy edges, and degrades performance\nwhen k becomes too large.\nWe therefore use a hop budget and a rank-gap condition.\nA shortcut is kept only if it is reached within depth k and\nsatisfies a minimum hierarchy gap τ. As shown in Table I,\nk = 2 gives the best trade-off: k = 1 misses useful context,",
+    "section": "body",
+    "retrieval_text": "FS The key is to restrict the search space. Naive BFS grows rapidly, introduces noisy edges, and degrades performance when k becomes too large. We therefore use a hop budget and a rank-gap condition. A shortcut is kept only if it is reached within depth k and satisfies a minimum hierarchy gap τ. As shown in Table I, k = 2 gives the best trade-off: k = 1 misses useful context,"
+  },
+  {
+    "id": "HAGNN论文.pdf::c019",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 19,
+    "start_char": 1337,
+    "end_char": 1753,
+    "text": "= 2 gives the best trade-off: k = 1 misses useful context,\nwhereas k = 3 adds topological noise on Cora and PubMed\nand causes OOM on WikiCS.\nBeyond depth control, the rank gap condition decides which\nlong range edges remain consistent with the global hierarchy.\nS(v) = {h ∈H | sh −sv ≥τ}\n(7)\nH denotes the top-p percentage of nodes ranked by SpringRank\nscore; we fix p = 10% across datasets. τ is the hierarchy gap",
+    "section": "body",
+    "retrieval_text": "= 2 gives the best trade-off: k = 1 misses useful context, whereas k = 3 adds topological noise on Cora and PubMed and causes OOM on WikiCS. Beyond depth control, the rank gap condition decides which long range edges remain consistent with the global hierarchy. S(v) = {h ∈H | sh −sv ≥τ} (7) H denotes the top-p percentage of nodes ranked by SpringRank score; we fix p = 10% across datasets. τ is the hierarchy gap"
+  },
+  {
+    "id": "HAGNN论文.pdf::c020",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 20,
+    "start_char": 1693,
+    "end_char": 2112,
+    "text": "ore; we fix p = 10% across datasets. τ is the hierarchy gap\nthreshold that suppresses weak shortcuts.\nFor candidate authority h and target node v, define\n∆(h, v) = sh −sv −τ.\n(8)\nDirected graph A\nSolve sparse ranking system\nobtain si, di = −si, and authority set H\nDepth limited BFS\nenumerate candidates with distBFS(v, h) ≤k\nsh −sv ≥τ?\nYes: keep adaptive shortcut and append to e\nA\nNo: reject weak or lateral shortcut",
+    "section": "body",
+    "retrieval_text": "ore; we fix p = 10% across datasets. τ is the hierarchy gap threshold that suppresses weak shortcuts. For candidate authority h and target node v, define ∆(h, v) = sh −sv −τ. (8) Directed graph A Solve sparse ranking system obtain si, di = −si, and authority set H Depth limited BFS enumerate candidates with distBFS(v, h) ≤k sh −sv ≥τ? Yes: keep adaptive shortcut and append to e A No: reject weak or lateral shortcut"
+  },
+  {
+    "id": "HAGNN论文.pdf::c021",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 21,
+    "start_char": 2052,
+    "end_char": 2426,
+    "text": "rtcut and append to e\nA\nNo: reject weak or lateral shortcut\nSparse hierarchy aware message passing\non A ∪e\nA\nFig. 1. Topology evolution flow for adaptive context construction.\nA candidate edge is kept only when ∆(h, v) ≥0 and the BFS\nconstraint also holds, yielding\neAvh = 1{distBFS(v, h) ≤k, h ∈H, ∆(h, v) ≥0} .\n(9)\nBounding the search keeps candidate edges under control,",
+    "section": "body",
+    "retrieval_text": "rtcut and append to e A No: reject weak or lateral shortcut Sparse hierarchy aware message passing on A ∪e A Fig. 1. Topology evolution flow for adaptive context construction. A candidate edge is kept only when ∆(h, v) ≥0 and the BFS constraint also holds, yielding eAvh = 1{distBFS(v, h) ≤k, h ∈H, ∆(h, v) ≥0} . (9) Bounding the search keeps candidate edges under control,"
+  },
+  {
+    "id": "HAGNN论文.pdf::c022",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 22,
+    "start_char": 2366,
+    "end_char": 2779,
+    "text": "9)\nBounding the search keeps candidate edges under control,\nespecially on larger graphs. In practice, k sets the receptive\nfield and τ filters lateral or weak shortcuts.\nC. Hierarchy Aware Message Passing\nOnce the context graph is fixed, node representations are\nupdated with hierarchy aware attention over the original\nneighborhood and retained context edges.\nh(l+1)\nv\n= σ\n\n\nX\nu∈N (v)∪S(v)\nαvuWh(l)\nu\n\n\n(10)",
+    "section": "body",
+    "retrieval_text": "9) Bounding the search keeps candidate edges under control, especially on larger graphs. In practice, k sets the receptive field and τ filters lateral or weak shortcuts. C. Hierarchy Aware Message Passing Once the context graph is fixed, node representations are updated with hierarchy aware attention over the original neighborhood and retained context edges. h(l+1) v = σ   X u∈N (v)∪S(v) αvuWh(l) u   (10)"
+  },
+  {
+    "id": "HAGNN论文.pdf::c023",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 23,
+    "start_char": 2719,
+    "end_char": 3139,
+    "text": "edges.\nh(l+1)\nv\n= σ\n\n\nX\nu∈N (v)∪S(v)\nαvuWh(l)\nu\n\n\n(10)\nThe attention coefficient jointly scores local and adaptive edges:\nαvu = exp(LeakyReLU(aT [Whv||Whu] + γ · ⊮[u ∈S(v)]))\nP\nw∈N (v)∪S(v) exp(. . . )\n(11)\nwhere ⊮[·] is the indicator function and γ is a learnable gate\nfor adaptive context edges.\nTo remain practical on large sparse graphs, attention is\nevaluated only on active edges rather than on a dense N × N",
+    "section": "body",
+    "retrieval_text": "edges. h(l+1) v = σ   X u∈N (v)∪S(v) αvuWh(l) u   (10) The attention coefficient jointly scores local and adaptive edges: αvu = exp(LeakyReLU(aT [Whv||Whu] + γ · ⊮[u ∈S(v)])) P w∈N (v)∪S(v) exp(. . . ) (11) where ⊮[·] is the indicator function and γ is a learnable gate for adaptive context edges. To remain practical on large sparse graphs, attention is evaluated only on active edges rather than on a dense N × N"
+  },
+  {
+    "id": "HAGNN论文.pdf::c024",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页",
+    "chunk": 24,
+    "start_char": 3079,
+    "end_char": 3314,
+    "text": "evaluated only on active edges rather than on a dense N × N\nmatrix, reducing computation from O(N 2) to O(|E| + |S|).\nD. Time and Space Complexity\nLet N = |V|, M = |E|, and f\nM = |eE|. Solving Equation (2)\nrequires\nO(Trank(M + N))\n(12)",
+    "section": "body",
+    "retrieval_text": "evaluated only on active edges rather than on a dense N × N matrix, reducing computation from O(N 2) to O(|E| + |S|). D. Time and Space Complexity Let N = |V|, M = |E|, and f M = |eE|. Solving Equation (2) requires O(Trank(M + N)) (12)"
+  },
+  {
+    "id": "HAGNN论文.pdf::c025",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 25,
+    "start_char": 0,
+    "end_char": 419,
+    "text": "TABLE II\nSUMMARY OF DATASET STATISTICS\nDataset\nNodes\nEdges\nFeatures\nClasses\nCora\n2,708\n5,429\n1,433\n7\nCiteseer\n3,327\n4,732\n3,703\n6\nPubMed\n19,717\n44,338\n500\n3\nWikiCS\n11,701\n216,123\n300\n10\nTABLE III\nHYPERPARAMETER CONFIGURATION FOR AHGNN\nHyperparameter\nValue\nHidden Dimension\n8\nAttention Heads\n8\nTop-p Ratio for H\n10%\nDropout Rate\n0.6\nLearning Rate\n0.005\nWeight Decay\n5 × 10−4\nTraining Epochs\n1000\nEarly Stopping Patience",
+    "section": "body",
+    "retrieval_text": "TABLE II SUMMARY OF DATASET STATISTICS Dataset Nodes Edges Features Classes Cora 2,708 5,429 1,433 7 Citeseer 3,327 4,732 3,703 6 PubMed 19,717 44,338 500 3 WikiCS 11,701 216,123 300 10 TABLE III HYPERPARAMETER CONFIGURATION FOR AHGNN Hyperparameter Value Hidden Dimension 8 Attention Heads 8 Top-p Ratio for H 10% Dropout Rate 0.6 Learning Rate 0.005 Weight Decay 5 × 10−4 Training Epochs 1000 Early Stopping Patience"
+  },
+  {
+    "id": "HAGNN论文.pdf::c026",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 26,
+    "start_char": 359,
+    "end_char": 771,
+    "text": "Decay\n5 × 10−4\nTraining Epochs\n1000\nEarly Stopping Patience\n200\nOptimizer\nAdam\nTABLE IV\nNODE CLASSIFICATION ACCURACY (%) OVER 5 INDEPENDENT RUNS\nModel\nCora\nCiteseer\nPubMed\nWikiCS\nMLP\n55.1 ± 1.2\n46.5 ± 1.5\n71.4 ± 0.8\n71.5 ± 0.9\nGCN\n81.5 ± 0.6\n70.3 ± 0.8\n79.0 ± 0.4\n77.2 ± 0.5\nGAT\n81.8 ± 0.7\n72.3 ± 0.7\n78.5 ± 0.5\n76.5 ± 0.6\nAPPNP\n83.3 ± 0.5\n71.8 ± 0.6\n79.7 ± 0.4\n77.0 ± 0.5\nAHGNN\n83.2 ± 0.4\n72.3 ± 0.5\n80.2 ± 0.3",
+    "section": "body",
+    "retrieval_text": "Decay 5 × 10−4 Training Epochs 1000 Early Stopping Patience 200 Optimizer Adam TABLE IV NODE CLASSIFICATION ACCURACY (%) OVER 5 INDEPENDENT RUNS Model Cora Citeseer PubMed WikiCS MLP 55.1 ± 1.2 46.5 ± 1.5 71.4 ± 0.8 71.5 ± 0.9 GCN 81.5 ± 0.6 70.3 ± 0.8 79.0 ± 0.4 77.2 ± 0.5 GAT 81.8 ± 0.7 72.3 ± 0.7 78.5 ± 0.5 76.5 ± 0.6 APPNP 83.3 ± 0.5 71.8 ± 0.6 79.7 ± 0.4 77.0 ± 0.5 AHGNN 83.2 ± 0.4 72.3 ± 0.5 80.2 ± 0.3"
+  },
+  {
+    "id": "HAGNN论文.pdf::c027",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 27,
+    "start_char": 711,
+    "end_char": 1121,
+    "text": "9.7 ± 0.4\n77.0 ± 0.5\nAHGNN\n83.2 ± 0.4\n72.3 ± 0.5\n80.2 ± 0.3\n77.5 ± 0.4\n†On Citeseer, AHGNN and GAT achieve the same mean (72.3%).\ntime and O(M + N) space, where Trank is the number of\nsolver iterations. With average branching factor ¯b, depth limited\nBFS explores at most O\n\u0010\n|H| Pk\nℓ=1 ¯bℓ\u0011\ncandidates, while the\nhierarchy gap filter retains only f\nM edges in practice.\nEach AHGNN layer then runs in O((M + f",
+    "section": "body",
+    "retrieval_text": "9.7 ± 0.4 77.0 ± 0.5 AHGNN 83.2 ± 0.4 72.3 ± 0.5 80.2 ± 0.3 77.5 ± 0.4 †On Citeseer, AHGNN and GAT achieve the same mean (72.3%). time and O(M + N) space, where Trank is the number of solver iterations. With average branching factor ¯b, depth limited BFS explores at most O \u0010 |H| Pk ℓ=1 ¯bℓ\u0011 candidates, while the hierarchy gap filter retains only f M edges in practice. Each AHGNN layer then runs in O((M + f"
+  },
+  {
+    "id": "HAGNN论文.pdf::c028",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 28,
+    "start_char": 1061,
+    "end_char": 1469,
+    "text": "M edges in practice.\nEach AHGNN layer then runs in O((M + f\nM)d) time and\nO(M + f\nM + Nd) space, compared with O(N 2d) time and\nO(N 2) memory for dense attention.\nIV. RESULTS\nWe evaluate AHGNN on Cora, Citeseer, PubMed, and\nWikiCS (Table II). Node classification uses standard Planetoid\nsplits for citation networks and official WikiCS masks. Link\nprediction uses a standard split with 10% test edges and 5%",
+    "section": "body",
+    "retrieval_text": "M edges in practice. Each AHGNN layer then runs in O((M + f M)d) time and O(M + f M + Nd) space, compared with O(N 2d) time and O(N 2) memory for dense attention. IV. RESULTS We evaluate AHGNN on Cora, Citeseer, PubMed, and WikiCS (Table II). Node classification uses standard Planetoid splits for citation networks and official WikiCS masks. Link prediction uses a standard split with 10% test edges and 5%"
+  },
+  {
+    "id": "HAGNN论文.pdf::c029",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 29,
+    "start_char": 1409,
+    "end_char": 1776,
+    "text": "prediction uses a standard split with 10% test edges and 5%\nvalidation edges. We compare against MLP, GCN, GAT, and\nAPPNP over 5 runs and report mean ± standard deviation;\nTable III lists the hyperparameters.\nWe evaluate node classification (Table IV, Figure 2) and\nlink prediction (Table V, Figure 3).\nFor node classification, local aggregation is already strong on",
+    "section": "body",
+    "retrieval_text": "prediction uses a standard split with 10% test edges and 5% validation edges. We compare against MLP, GCN, GAT, and APPNP over 5 runs and report mean ± standard deviation; Table III lists the hyperparameters. We evaluate node classification (Table IV, Figure 2) and link prediction (Table V, Figure 3). For node classification, local aggregation is already strong on"
+  },
+  {
+    "id": "HAGNN论文.pdf::c030",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 30,
+    "start_char": 1716,
+    "end_char": 2066,
+    "text": "node classification, local aggregation is already strong on\nCora and Citeseer, so gains are modest. AHGNN is most helpful\non larger graphs, where unconstrained expansion would over\nsmooth features: it reaches 80.2% on PubMed and 77.5% on\nCora\nCiteseer\nPubMed\nWikiCS\n40\n50\n60\n70\n80\n90\nAccuracy (%)\nNode Classification Accuracy\nMLP\nGCN\nGAT\nAPPNP\nAHGNN",
+    "section": "body",
+    "retrieval_text": "node classification, local aggregation is already strong on Cora and Citeseer, so gains are modest. AHGNN is most helpful on larger graphs, where unconstrained expansion would over smooth features: it reaches 80.2% on PubMed and 77.5% on Cora Citeseer PubMed WikiCS 40 50 60 70 80 90 Accuracy (%) Node Classification Accuracy MLP GCN GAT APPNP AHGNN"
+  },
+  {
+    "id": "HAGNN论文.pdf::c031",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 31,
+    "start_char": 2006,
+    "end_char": 2419,
+    "text": "cy (%)\nNode Classification Accuracy\nMLP\nGCN\nGAT\nAPPNP\nAHGNN\nFig. 2. Node classification accuracy comparison across Cora, Citeseer, PubMed,\nand WikiCS.\nTABLE V\nLINK PREDICTION AUC (%) OVER 5 INDEPENDENT RUNS\nModel\nCora\nCiteseer\nPubMed\nWikiCS\nMLP\n74.3 ± 1.5\n70.5 ± 1.8\n80.1 ± 1.2\n75.0 ± 1.4\nGCN\n90.4 ± 0.8\n89.4 ± 1.1\n96.4 ± 0.5\n90.2 ± 0.7\nGAT\n93.6 ± 0.6\n94.0 ± 0.9\n96.8 ± 0.4\n94.6 ± 0.6\nAPPNP\n92.1 ± 0.7\n95.1 ± 0.8",
+    "section": "body",
+    "retrieval_text": "cy (%) Node Classification Accuracy MLP GCN GAT APPNP AHGNN Fig. 2. Node classification accuracy comparison across Cora, Citeseer, PubMed, and WikiCS. TABLE V LINK PREDICTION AUC (%) OVER 5 INDEPENDENT RUNS Model Cora Citeseer PubMed WikiCS MLP 74.3 ± 1.5 70.5 ± 1.8 80.1 ± 1.2 75.0 ± 1.4 GCN 90.4 ± 0.8 89.4 ± 1.1 96.4 ± 0.5 90.2 ± 0.7 GAT 93.6 ± 0.6 94.0 ± 0.9 96.8 ± 0.4 94.6 ± 0.6 APPNP 92.1 ± 0.7 95.1 ± 0.8"
+  },
+  {
+    "id": "HAGNN论文.pdf::c032",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 32,
+    "start_char": 2359,
+    "end_char": 2758,
+    "text": "4.0 ± 0.9\n96.8 ± 0.4\n94.6 ± 0.6\nAPPNP\n92.1 ± 0.7\n95.1 ± 0.8\n97.4 ± 0.5\n95.8 ± 0.5\nAHGNN\n95.6 ± 0.4\n96.8 ± 0.5\n98.5 ± 0.2\n97.2 ± 0.3\nCora\nCiteseer\nPubMed\nWikiCS\n60\n65\n70\n75\n80\n85\n90\n95\n100\nAUC (%)\nLink Prediction AUC\nMLP\nGCN\nGAT\nAPPNP\nAHGNN\nFig. 3. Link prediction AUC comparison across Cora, Citeseer, PubMed, and\nWikiCS.\nWikiCS. On Cora, AHGNN (83.2%) is statistically comparable\nto APPNP (83.3%).",
+    "section": "body",
+    "retrieval_text": "4.0 ± 0.9 96.8 ± 0.4 94.6 ± 0.6 APPNP 92.1 ± 0.7 95.1 ± 0.8 97.4 ± 0.5 95.8 ± 0.5 AHGNN 95.6 ± 0.4 96.8 ± 0.5 98.5 ± 0.2 97.2 ± 0.3 Cora Citeseer PubMed WikiCS 60 65 70 75 80 85 90 95 100 AUC (%) Link Prediction AUC MLP GCN GAT APPNP AHGNN Fig. 3. Link prediction AUC comparison across Cora, Citeseer, PubMed, and WikiCS. WikiCS. On Cora, AHGNN (83.2%) is statistically comparable to APPNP (83.3%)."
+  },
+  {
+    "id": "HAGNN论文.pdf::c033",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 33,
+    "start_char": 2698,
+    "end_char": 3091,
+    "text": "AHGNN (83.2%) is statistically comparable\nto APPNP (83.3%).\nLink prediction benefits more because it depends on direc-\ntional structure. By preserving direction in hierarchy estimation\nand context expansion, AHGNN outperforms all baselines, with\nAUC gains of 2.0%, 1.7%, 1.1%, and 1.4% over the strongest\ncompeting baseline on Cora, Citeseer, PubMed, and WikiCS.\nA. Ablation on edge direction",
+    "section": "body",
+    "retrieval_text": "AHGNN (83.2%) is statistically comparable to APPNP (83.3%). Link prediction benefits more because it depends on direc- tional structure. By preserving direction in hierarchy estimation and context expansion, AHGNN outperforms all baselines, with AUC gains of 2.0%, 1.7%, 1.1%, and 1.4% over the strongest competing baseline on Cora, Citeseer, PubMed, and WikiCS. A. Ablation on edge direction"
+  },
+  {
+    "id": "HAGNN论文.pdf::c034",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页",
+    "chunk": 34,
+    "start_char": 3031,
+    "end_char": 3407,
+    "text": "Citeseer, PubMed, and WikiCS.\nA. Ablation on edge direction\nWe ablate edge direction by symmetrizing the graph\n(Aundir = A + AT ) before hierarchy estimation. Substituting\nDin = Dout into Equation (2) forces the right hand side to zero,\nflattening the hierarchy. Table VI shows that this undirected\nvariant collapses to local baseline behavior, especially for link\nprediction.",
+    "section": "body",
+    "retrieval_text": "Citeseer, PubMed, and WikiCS. A. Ablation on edge direction We ablate edge direction by symmetrizing the graph (Aundir = A + AT ) before hierarchy estimation. Substituting Din = Dout into Equation (2) forces the right hand side to zero, flattening the hierarchy. Table VI shows that this undirected variant collapses to local baseline behavior, especially for link prediction."
+  },
+  {
+    "id": "HAGNN论文.pdf::c035",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 35,
+    "start_char": 0,
+    "end_char": 417,
+    "text": "TABLE VI\nABLATION: DIRECTED VS. UNDIRECTED HIERARCHY OVER 5\nINDEPENDENT RUNS\nModel Variant\nCora\nCiteseer\nPubMed\nWikiCS\nNode Classification (Accuracy %)\nUndirected (A + AT )\n81.8 ± 0.7\n72.3 ± 0.7\n78.5 ± 0.5\n76.5 ± 0.6\nDirected (AHGNN)\n83.2 ± 0.4\n72.3 ± 0.5\n80.2 ± 0.3\n77.5 ± 0.4\nLink Prediction (AUC %)\nUndirected (A + AT )\n93.6 ± 0.6\n94.0 ± 0.9\n96.8 ± 0.4\n94.6 ± 0.6\nDirected (AHGNN)\n95.6 ± 0.4\n96.8 ± 0.5\n98.5 ± 0.2",
+    "section": "body",
+    "retrieval_text": "TABLE VI ABLATION: DIRECTED VS. UNDIRECTED HIERARCHY OVER 5 INDEPENDENT RUNS Model Variant Cora Citeseer PubMed WikiCS Node Classification (Accuracy %) Undirected (A + AT ) 81.8 ± 0.7 72.3 ± 0.7 78.5 ± 0.5 76.5 ± 0.6 Directed (AHGNN) 83.2 ± 0.4 72.3 ± 0.5 80.2 ± 0.3 77.5 ± 0.4 Link Prediction (AUC %) Undirected (A + AT ) 93.6 ± 0.6 94.0 ± 0.9 96.8 ± 0.4 94.6 ± 0.6 Directed (AHGNN) 95.6 ± 0.4 96.8 ± 0.5 98.5 ± 0.2"
+  },
+  {
+    "id": "HAGNN论文.pdf::c036",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 36,
+    "start_char": 357,
+    "end_char": 771,
+    "text": "4.6 ± 0.6\nDirected (AHGNN)\n95.6 ± 0.4\n96.8 ± 0.5\n98.5 ± 0.2\n97.2 ± 0.3\n0.0\n0.001\n0.005 0.01\n0.05\n0.1\nHierarchy Gap Threshold ( )\n72\n74\n76\n78\n80\n82\nNode Classification Acc (%)\nSensitivity of au on Node Classification\nCora\nCiteseer\nPubMed\nWikiCS\n0.0\n0.001\n0.005 0.01\n0.05\n0.1\nHierarchy Gap Threshold ( )\n94\n95\n96\n97\n98\nLink Prediction AUC (%)\nSensitivity of au on Link Prediction\nCora\nCiteseer\nPubMed\nWikiCS\nFig. 4.",
+    "section": "body",
+    "retrieval_text": "4.6 ± 0.6 Directed (AHGNN) 95.6 ± 0.4 96.8 ± 0.5 98.5 ± 0.2 97.2 ± 0.3 0.0 0.001 0.005 0.01 0.05 0.1 Hierarchy Gap Threshold ( ) 72 74 76 78 80 82 Node Classification Acc (%) Sensitivity of au on Node Classification Cora Citeseer PubMed WikiCS 0.0 0.001 0.005 0.01 0.05 0.1 Hierarchy Gap Threshold ( ) 94 95 96 97 98 Link Prediction AUC (%) Sensitivity of au on Link Prediction Cora Citeseer PubMed WikiCS Fig. 4."
+  },
+  {
+    "id": "HAGNN论文.pdf::c037",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 37,
+    "start_char": 711,
+    "end_char": 1106,
+    "text": "f au on Link Prediction\nCora\nCiteseer\nPubMed\nWikiCS\nFig. 4.\nSensitivity analysis of the hierarchy gap threshold τ on Node\nClassification and Link Prediction tasks.\nB. Parameter Sensitivity: Hierarchy Gap Threshold τ\nWe evaluate τ ∈{0.0, 0.001, 0.005, 0.01, 0.05, 0.1}. As\nshown in Figure 4, τ = 0.0 keeps noisy lateral connections,\nwhile overly large thresholds reject valid context and regress",
+    "section": "body",
+    "retrieval_text": "f au on Link Prediction Cora Citeseer PubMed WikiCS Fig. 4. Sensitivity analysis of the hierarchy gap threshold τ on Node Classification and Link Prediction tasks. B. Parameter Sensitivity: Hierarchy Gap Threshold τ We evaluate τ ∈{0.0, 0.001, 0.005, 0.01, 0.05, 0.1}. As shown in Figure 4, τ = 0.0 keeps noisy lateral connections, while overly large thresholds reject valid context and regress"
+  },
+  {
+    "id": "HAGNN论文.pdf::c038",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 38,
+    "start_char": 1046,
+    "end_char": 1458,
+    "text": "le overly large thresholds reject valid context and regress\ntoward local baselines. A small threshold works best, although\nits exact value depends on graph density.\nLink prediction is more sensitive to τ because false positive\nshortcuts directly corrupt topology, whereas node classification\nremains relatively stable near the effective range.\nV. CONCLUSION\nAHGNN improves hierarchy aware graph learning by pre-",
+    "section": "body",
+    "retrieval_text": "le overly large thresholds reject valid context and regress toward local baselines. A small threshold works best, although its exact value depends on graph density. Link prediction is more sensitive to τ because false positive shortcuts directly corrupt topology, whereas node classification remains relatively stable near the effective range. V. CONCLUSION AHGNN improves hierarchy aware graph learning by pre-"
+  },
+  {
+    "id": "HAGNN论文.pdf::c039",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 39,
+    "start_char": 1398,
+    "end_char": 1759,
+    "text": "USION\nAHGNN improves hierarchy aware graph learning by pre-\nserving direction, constraining context expansion with depth\nlimited BFS and hierarchy gap filtering, and using sparse\nattention for scalable aggregation. Across four benchmarks,\nthese choices reduce noisy shortcuts, improve link prediction\nmost strongly, and remain effective on large sparse graphs.",
+    "section": "body",
+    "retrieval_text": "USION AHGNN improves hierarchy aware graph learning by pre- serving direction, constraining context expansion with depth limited BFS and hierarchy gap filtering, and using sparse attention for scalable aggregation. Across four benchmarks, these choices reduce noisy shortcuts, improve link prediction most strongly, and remain effective on large sparse graphs."
+  },
+  {
+    "id": "HAGNN论文.pdf::c040",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 40,
+    "start_char": 1699,
+    "end_char": 2069,
+    "text": "most strongly, and remain effective on large sparse graphs.\nFuture work can study adaptive depth selection and stronger\nsparse kernels.\nREFERENCES\n[1] T. N. Kipf and M. Welling. Semi-Supervised Classification with Graph\nConvolutional Networks. In Proc. Int. Conf. Learn. Represent. (ICLR),\n2017.\n[2] P. Veliˇckovi´c, G. Cucurull, A. Casanova, A. Romero, P. Li`o, and Y.",
+    "section": "body",
+    "retrieval_text": "most strongly, and remain effective on large sparse graphs. Future work can study adaptive depth selection and stronger sparse kernels."
+  },
+  {
+    "id": "HAGNN论文.pdf::c041",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 41,
+    "start_char": 2009,
+    "end_char": 2360,
+    "text": "ovi´c, G. Cucurull, A. Casanova, A. Romero, P. Li`o, and Y.\nBengio. Graph Attention Networks. In Proc. Int. Conf. Learn. Represent.\n(ICLR), 2018.\n[3] M. Jin, H. Y. Koh, Q. Wen, D. Zambon, C. Alippi, G. I. Webb, et\nal. A Survey on Graph Neural Networks for Time Series: Forecasting,\nClassification, Imputation, and Anomaly Detection. IEEE Transactions",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c042",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 42,
+    "start_char": 2300,
+    "end_char": 2688,
+    "text": "ation, Imputation, and Anomaly Detection. IEEE Transactions\non Pattern Analysis and Machine Intelligence, vol. 46, no. 12, pp. 10466–\n10485, 2024. doi: 10.1109/TPAMI.2024.3443141.\n[4] C. Chen, Y. Wu, Q. Dai, H.-Y. Zhou, M. Xu, and S. Yang. A Survey on\nGraph Neural Networks and Graph Transformers in Computer Vision: A\nTask-Oriented Perspective. IEEE Transactions on Pattern Analysis and",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c043",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 43,
+    "start_char": 2628,
+    "end_char": 3046,
+    "text": "nted Perspective. IEEE Transactions on Pattern Analysis and\nMachine Intelligence, vol. 46, no. 12, pp. 10297–10318, Dec. 2024, doi:\n10.1109/TPAMI.2024.3445463.\n[5] Z. Zhang, P. Cui, and W. Zhu. Deep Learning on Graphs: A Survey.\nIEEE Transactions on Knowledge and Data Engineering, vol. 34, no. 1,\npp. 249–270, 2022. doi: 10.1109/TKDE.2020.2981333.\n[6] X. Wang, D. Bo, C. Shi, S. Fan, Y. Ye, and P. S. Yu. A Survey on",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c044",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 44,
+    "start_char": 2986,
+    "end_char": 3401,
+    "text": "ng, D. Bo, C. Shi, S. Fan, Y. Ye, and P. S. Yu. A Survey on\nHeterogeneous Graph Embedding: Methods, Techniques, Applications\nand Sources. IEEE Transactions on Big Data, vol. 9, no. 2, pp. 415–436,\n2023. doi: 10.1109/TBDATA.2022.3177455.\n[7] J. Gasteiger, A. Bojchevski, and S. G¨unnemann. Predict then Propagate:\nGraph Neural Networks meet Personalized PageRank. In Proc. Int. Conf.\nLearn. Represent. (ICLR), 2019.",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c045",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 45,
+    "start_char": 3341,
+    "end_char": 3751,
+    "text": "geRank. In Proc. Int. Conf.\nLearn. Represent. (ICLR), 2019.\n[8] E. Chien, J. Peng, P. Li, and O. Milenkovic.\nAdaptive Universal\nGeneralized PageRank Graph Neural Network. In Proc. Int. Conf. Learn.\nRepresent. (ICLR), 2021.\n[9] D. Bo, X. Wang, C. Shi, and H. Shen.\nBeyond Low-Frequency\nInformation in Graph Convolutional Networks. In Proc. AAAI Conf.\nArtif. Intell. (AAAI), vol. 35, no. 5, pp. 3950–3957, 2021.",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c046",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 46,
+    "start_char": 3691,
+    "end_char": 4076,
+    "text": "Artif. Intell. (AAAI), vol. 35, no. 5, pp. 3950–3957, 2021.\n[10] D. Wu, H. Wu, and J. Li. Hierarchy-Aware Adaptive Graph Neural\nNetwork. IEEE Transactions on Knowledge and Data Engineering, vol.\n37, no. 1, pp. 365–378, 2025.\n[11] H. Gao and S. Ji. Graph U-Nets. In Proc. 36th Int. Conf. Mach. Learn.\n(ICML), ser. Proceedings of Machine Learning Research, vol. 97, pp.\n2083–2092, 2019.",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c047",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 47,
+    "start_char": 4016,
+    "end_char": 4375,
+    "text": "of Machine Learning Research, vol. 97, pp.\n2083–2092, 2019.\n[12] Z. Zhang, J. Bu, M. Ester, J. Zhang, C. Yao, Z. Yu, and C. Wang.\nHierarchical Graph Pooling with Structure Learning. arXiv preprint\narXiv:1911.05954, 2019.\n[13] Z.-P. Li, S.-G. Wang, Q.-H. Zhang, Y.-J. Pan, N.-A. Xiao, J.-Y. Guo,\net al.\nGraph Pooling for Graph-Level Representation Learning: A",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c048",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 48,
+    "start_char": 4315,
+    "end_char": 4712,
+    "text": "l.\nGraph Pooling for Graph-Level Representation Learning: A\nSurvey. Artificial Intelligence Review, vol. 58, article 45, 2025, doi:\n10.1007/s10462-024-10949-2.\n[14] C. Ying, T. Cai, S. Luo, S. Zheng, G. Ke, D. He, Y. Shen, and T.-Y. Liu.\nDo Transformers Really Perform Badly for Graph Representation? In\nAdvances in Neural Information Processing Systems (NeurIPS), vol. 34,\npp. 28877–28888, 2021.",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c049",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 49,
+    "start_char": 4652,
+    "end_char": 5028,
+    "text": "ocessing Systems (NeurIPS), vol. 34,\npp. 28877–28888, 2021.\n[15] L. Ramp´aˇsek, M. Galkin, V. P. Dwivedi, A. T. Luu, G. Wolf, and D.\nBeaini. Recipe for a General, Powerful, Scalable Graph Transformer. In\nAdvances in Neural Information Processing Systems (NeurIPS), vol. 35,\npp. 14501–14515, 2022.\n[16] Q. Wu, W. Zhao, C. Yang, H. Zhang, F. Nie, H. Jiang, Y. Bian, and J. Yan.",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c050",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 50,
+    "start_char": 4968,
+    "end_char": 5361,
+    "text": ", C. Yang, H. Zhang, F. Nie, H. Jiang, Y. Bian, and J. Yan.\nSGFormer: Simplifying and Empowering Transformers for Large-Graph\nRepresentations. In Advances in Neural Information Processing Systems\n(NeurIPS), vol. 36, pp. 64753–64773, 2023.\n[17] C. Sun, C. Li, X. Lin, Z. Zheng, M. Meng, R. Gu, and Z. Wang. Attention-\nbased graph neural networks: a survey. Artificial Intelligence Review, vol.",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c051",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 51,
+    "start_char": 5301,
+    "end_char": 5691,
+    "text": "al networks: a survey. Artificial Intelligence Review, vol.\n56, Suppl. 2, pp. 2263–2310, 2023, doi: 10.1007/s10462-023-10577-2.\n[18] C. Yuan, K. Zhao, E. E. Kuruoglu, L. Wang, T. Xu, W. Huang, D. Zhao,\net al. A Survey of Graph Transformers: Architectures, Theories and\nApplications. arXiv preprint arXiv:2502.16533, 2025.\n[19] M. Ding, T. Rabbani, B. An, E. Wang, and F. Huang. Sketch-GNN:",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c052",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 52,
+    "start_char": 5631,
+    "end_char": 5995,
+    "text": "Ding, T. Rabbani, B. An, E. Wang, and F. Huang. Sketch-GNN:\nScalable Graph Neural Networks with Sublinear Training Complexity.\nIn Advances in Neural Information Processing Systems (NeurIPS), vol.\n35, pp. 2930–2943, 2022.\n[20] X. Zhang, Y. He, N. Brugnone, M. Perlmutter, and M. Hirn. MagNet: A\nNeural Network for Directed Graphs. In Advances in Neural Information",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::c053",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页",
+    "chunk": 53,
+    "start_char": 5935,
+    "end_char": 6056,
+    "text": "work for Directed Graphs. In Advances in Neural Information\nProcessing Systems (NeurIPS), vol. 34, pp. 27003–27015, 2021.",
+    "section": "references",
+    "retrieval_text": ""
+  },
+  {
+    "id": "HAGNN论文.pdf::tI",
+    "file": "HAGNN论文.pdf",
+    "location": "第 2 页，Table I",
+    "chunk": "I",
+    "section": "body",
+    "kind": "table",
+    "table": {
+      "reference": "Table I",
+      "caption": "IMPACT OF BFS DEPTH (k) ON AHGNN PERFORMANCE",
+      "headers": [
+        "Task",
+        "Depth",
+        "Cora",
+        "PubMed",
+        "WikiCS"
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "section": "Node Class. (Acc %)",
+          "cells": [
+            "Node Class. (Acc %)",
+            "k = 1",
+            "82.3",
+            "79.2",
+            "76.8"
+          ]
+        },
+        {
+          "id": "r2",
+          "section": "Node Class. (Acc %)",
+          "cells": [
+            "Node Class. (Acc %)",
+            "k = 2",
+            "83.2",
+            "80.2",
+            "77.5"
+          ]
+        },
+        {
+          "id": "r3",
+          "section": "Node Class. (Acc %)",
+          "cells": [
+            "Node Class. (Acc %)",
+            "k = 3",
+            "81.1",
+            "78.6",
+            "OOM"
+          ]
+        },
+        {
+          "id": "r4",
+          "section": "Node Class. (Acc %)",
+          "cells": [
+            "Node Class. (Acc %)",
+            "k = 4",
+            "78.5",
+            "76.4",
+            "OOM"
+          ]
+        },
+        {
+          "id": "r5",
+          "section": "Node Class. (Acc %)",
+          "cells": [
+            "Node Class. (Acc %)",
+            "k = 5",
+            "75.3",
+            "OOM",
+            "OOM"
+          ]
+        },
+        {
+          "id": "r6",
+          "section": "Link Pred. (AUC %)",
+          "cells": [
+            "Link Pred. (AUC %)",
+            "k = 1",
+            "94.1",
+            "97.0",
+            "95.5"
+          ]
+        },
+        {
+          "id": "r7",
+          "section": "Link Pred. (AUC %)",
+          "cells": [
+            "Link Pred. (AUC %)",
+            "k = 2",
+            "95.6",
+            "98.5",
+            "97.2"
+          ]
+        },
+        {
+          "id": "r8",
+          "section": "Link Pred. (AUC %)",
+          "cells": [
+            "Link Pred. (AUC %)",
+            "k = 3",
+            "93.5",
+            "96.2",
+            "OOM"
+          ]
+        },
+        {
+          "id": "r9",
+          "section": "Link Pred. (AUC %)",
+          "cells": [
+            "Link Pred. (AUC %)",
+            "k = 4",
+            "90.2",
+            "93.8",
+            "OOM"
+          ]
+        },
+        {
+          "id": "r10",
+          "section": "Link Pred. (AUC %)",
+          "cells": [
+            "Link Pred. (AUC %)",
+            "k = 5",
+            "88.4",
+            "OOM",
+            "OOM"
+          ]
+        }
+      ],
+      "notes": [],
+      "bbox": [
+        48.9640007019043,
+        80.26932525634766,
+        300.0300598144531,
+        229.072509765625
+      ]
+    },
+    "text": "Table I: IMPACT OF BFS DEPTH (k) ON AHGNN PERFORMANCE\nColumns: c0=Task; c1=Depth; c2=Cora; c3=PubMed; c4=WikiCS\nr1 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 1; c2=82.3; c3=79.2; c4=76.8\nr2 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 2; c2=83.2; c3=80.2; c4=77.5\nr3 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 3; c2=81.1; c3=78.6; c4=OOM\nr4 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 4; c2=78.5; c3=76.4; c4=OOM\nr5 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 5; c2=75.3; c3=OOM; c4=OOM\nr6 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 1; c2=94.1; c3=97.0; c4=95.5\nr7 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 2; c2=95.6; c3=98.5; c4=97.2\nr8 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 3; c2=93.5; c3=96.2; c4=OOM\nr9 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 4; c2=90.2; c3=93.8; c4=OOM\nr10 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 5; c2=88.4; c3=OOM; c4=OOM",
+    "retrieval_text": "Table I: IMPACT OF BFS DEPTH (k) ON AHGNN PERFORMANCE\nColumns: c0=Task; c1=Depth; c2=Cora; c3=PubMed; c4=WikiCS\nr1 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 1; c2=82.3; c3=79.2; c4=76.8\nr2 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 2; c2=83.2; c3=80.2; c4=77.5\nr3 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 3; c2=81.1; c3=78.6; c4=OOM\nr4 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 4; c2=78.5; c3=76.4; c4=OOM\nr5 [section=Node Class. (Acc %)]: c0=Node Class. (Acc %); c1=k = 5; c2=75.3; c3=OOM; c4=OOM\nr6 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 1; c2=94.1; c3=97.0; c4=95.5\nr7 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 2; c2=95.6; c3=98.5; c4=97.2\nr8 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 3; c2=93.5; c3=96.2; c4=OOM\nr9 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 4; c2=90.2; c3=93.8; c4=OOM\nr10 [section=Link Pred. (AUC %)]: c0=Link Pred. (AUC %); c1=k = 5; c2=88.4; c3=OOM; c4=OOM"
+  },
+  {
+    "id": "HAGNN论文.pdf::tII",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页，Table II",
+    "chunk": "II",
+    "section": "body",
+    "kind": "table",
+    "table": {
+      "reference": "Table II",
+      "caption": "SUMMARY OF DATASET STATISTICS",
+      "headers": [
+        "Dataset",
+        "Nodes",
+        "Edges",
+        "Features",
+        "Classes"
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "section": "",
+          "cells": [
+            "Cora",
+            "2,708",
+            "5,429",
+            "1,433",
+            "7"
+          ]
+        },
+        {
+          "id": "r2",
+          "section": "",
+          "cells": [
+            "Citeseer",
+            "3,327",
+            "4,732",
+            "3,703",
+            "6"
+          ]
+        },
+        {
+          "id": "r3",
+          "section": "",
+          "cells": [
+            "PubMed",
+            "19,717",
+            "44,338",
+            "500",
+            "3"
+          ]
+        },
+        {
+          "id": "r4",
+          "section": "",
+          "cells": [
+            "WikiCS",
+            "11,701",
+            "216,123",
+            "300",
+            "10"
+          ]
+        }
+      ],
+      "notes": [],
+      "bbox": [
+        48.9640007019043,
+        78.96778106689453,
+        300.0223388671875,
+        152.8568115234375
+      ]
+    },
+    "text": "Table II: SUMMARY OF DATASET STATISTICS\nColumns: c0=Dataset; c1=Nodes; c2=Edges; c3=Features; c4=Classes\nr1: c0=Cora; c1=2,708; c2=5,429; c3=1,433; c4=7\nr2: c0=Citeseer; c1=3,327; c2=4,732; c3=3,703; c4=6\nr3: c0=PubMed; c1=19,717; c2=44,338; c3=500; c4=3\nr4: c0=WikiCS; c1=11,701; c2=216,123; c3=300; c4=10",
+    "retrieval_text": "Table II: SUMMARY OF DATASET STATISTICS\nColumns: c0=Dataset; c1=Nodes; c2=Edges; c3=Features; c4=Classes\nr1: c0=Cora; c1=2,708; c2=5,429; c3=1,433; c4=7\nr2: c0=Citeseer; c1=3,327; c2=4,732; c3=3,703; c4=6\nr3: c0=PubMed; c1=19,717; c2=44,338; c3=500; c4=3\nr4: c0=WikiCS; c1=11,701; c2=216,123; c3=300; c4=10"
+  },
+  {
+    "id": "HAGNN论文.pdf::tIII",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页，Table III",
+    "chunk": "III",
+    "section": "body",
+    "kind": "table",
+    "table": {
+      "reference": "Table III",
+      "caption": "HYPERPARAMETER CONFIGURATION FOR AHGNN",
+      "headers": [
+        "Hyperparameter",
+        "Value"
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "section": "",
+          "cells": [
+            "Hidden Dimension",
+            "8"
+          ]
+        },
+        {
+          "id": "r2",
+          "section": "",
+          "cells": [
+            "Attention Heads",
+            "8"
+          ]
+        },
+        {
+          "id": "r3",
+          "section": "",
+          "cells": [
+            "Top-p Ratio for H",
+            "10%"
+          ]
+        },
+        {
+          "id": "r4",
+          "section": "",
+          "cells": [
+            "Dropout Rate",
+            "0.6"
+          ]
+        },
+        {
+          "id": "r5",
+          "section": "",
+          "cells": [
+            "Learning Rate",
+            "0.005"
+          ]
+        },
+        {
+          "id": "r6",
+          "section": "",
+          "cells": [
+            "Weight Decay",
+            "5 × 10−4"
+          ]
+        },
+        {
+          "id": "r7",
+          "section": "",
+          "cells": [
+            "Training Epochs",
+            "1000"
+          ]
+        },
+        {
+          "id": "r8",
+          "section": "",
+          "cells": [
+            "Early Stopping Patience",
+            "200"
+          ]
+        },
+        {
+          "id": "r9",
+          "section": "",
+          "cells": [
+            "Optimizer",
+            "Adam"
+          ]
+        }
+      ],
+      "notes": [],
+      "bbox": [
+        106.8010025024414,
+        195.99700927734375,
+        242.18399047851562,
+        296.7590026855469
+      ]
+    },
+    "text": "Table III: HYPERPARAMETER CONFIGURATION FOR AHGNN\nColumns: c0=Hyperparameter; c1=Value\nr1: c0=Hidden Dimension; c1=8\nr2: c0=Attention Heads; c1=8\nr3: c0=Top-p Ratio for H; c1=10%\nr4: c0=Dropout Rate; c1=0.6\nr5: c0=Learning Rate; c1=0.005\nr6: c0=Weight Decay; c1=5 × 10−4\nr7: c0=Training Epochs; c1=1000\nr8: c0=Early Stopping Patience; c1=200\nr9: c0=Optimizer; c1=Adam",
+    "retrieval_text": "Table III: HYPERPARAMETER CONFIGURATION FOR AHGNN\nColumns: c0=Hyperparameter; c1=Value\nr1: c0=Hidden Dimension; c1=8\nr2: c0=Attention Heads; c1=8\nr3: c0=Top-p Ratio for H; c1=10%\nr4: c0=Dropout Rate; c1=0.6\nr5: c0=Learning Rate; c1=0.005\nr6: c0=Weight Decay; c1=5 × 10−4\nr7: c0=Training Epochs; c1=1000\nr8: c0=Early Stopping Patience; c1=200\nr9: c0=Optimizer; c1=Adam"
+  },
+  {
+    "id": "HAGNN论文.pdf::tIV",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页，Table IV",
+    "chunk": "IV",
+    "section": "body",
+    "kind": "table",
+    "table": {
+      "reference": "Table IV",
+      "caption": "NODE CLASSIFICATION ACCURACY (%) OVER 5 INDEPENDENT RUNS",
+      "headers": [
+        "Model",
+        "Cora",
+        "Citeseer",
+        "PubMed",
+        "WikiCS"
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "section": "",
+          "cells": [
+            "MLP",
+            "55.1 ± 1.2",
+            "46.5 ± 1.5",
+            "71.4 ± 0.8",
+            "71.5 ± 0.9"
+          ]
+        },
+        {
+          "id": "r2",
+          "section": "",
+          "cells": [
+            "GCN",
+            "81.5 ± 0.6",
+            "70.3 ± 0.8",
+            "79.0 ± 0.4",
+            "77.2 ± 0.5"
+          ]
+        },
+        {
+          "id": "r3",
+          "section": "",
+          "cells": [
+            "GAT",
+            "81.8 ± 0.7",
+            "72.3 ± 0.7",
+            "78.5 ± 0.5",
+            "76.5 ± 0.6"
+          ]
+        },
+        {
+          "id": "r4",
+          "section": "",
+          "cells": [
+            "APPNP",
+            "83.3 ± 0.5",
+            "71.8 ± 0.6",
+            "79.7 ± 0.4",
+            "77.0 ± 0.5"
+          ]
+        },
+        {
+          "id": "r5",
+          "section": "",
+          "cells": [
+            "AHGNN",
+            "83.2 ± 0.4",
+            "72.3 ± 0.5",
+            "80.2 ± 0.3",
+            "77.5 ± 0.4"
+          ]
+        }
+      ],
+      "notes": [
+        "†On Citeseer, AHGNN and GAT achieve the same mean (72.3%)."
+      ],
+      "bbox": [
+        48.9640007019043,
+        341.1088562011719,
+        300.0279235839844,
+        425.390625
+      ]
+    },
+    "text": "Table IV: NODE CLASSIFICATION ACCURACY (%) OVER 5 INDEPENDENT RUNS\nColumns: c0=Model; c1=Cora; c2=Citeseer; c3=PubMed; c4=WikiCS\nr1: c0=MLP; c1=55.1 ± 1.2; c2=46.5 ± 1.5; c3=71.4 ± 0.8; c4=71.5 ± 0.9\nr2: c0=GCN; c1=81.5 ± 0.6; c2=70.3 ± 0.8; c3=79.0 ± 0.4; c4=77.2 ± 0.5\nr3: c0=GAT; c1=81.8 ± 0.7; c2=72.3 ± 0.7; c3=78.5 ± 0.5; c4=76.5 ± 0.6\nr4: c0=APPNP; c1=83.3 ± 0.5; c2=71.8 ± 0.6; c3=79.7 ± 0.4; c4=77.0 ± 0.5\nr5: c0=AHGNN; c1=83.2 ± 0.4; c2=72.3 ± 0.5; c3=80.2 ± 0.3; c4=77.5 ± 0.4\nNotes: †On Citeseer, AHGNN and GAT achieve the same mean (72.3%).",
+    "retrieval_text": "Table IV: NODE CLASSIFICATION ACCURACY (%) OVER 5 INDEPENDENT RUNS\nColumns: c0=Model; c1=Cora; c2=Citeseer; c3=PubMed; c4=WikiCS\nr1: c0=MLP; c1=55.1 ± 1.2; c2=46.5 ± 1.5; c3=71.4 ± 0.8; c4=71.5 ± 0.9\nr2: c0=GCN; c1=81.5 ± 0.6; c2=70.3 ± 0.8; c3=79.0 ± 0.4; c4=77.2 ± 0.5\nr3: c0=GAT; c1=81.8 ± 0.7; c2=72.3 ± 0.7; c3=78.5 ± 0.5; c4=76.5 ± 0.6\nr4: c0=APPNP; c1=83.3 ± 0.5; c2=71.8 ± 0.6; c3=79.7 ± 0.4; c4=77.0 ± 0.5\nr5: c0=AHGNN; c1=83.2 ± 0.4; c2=72.3 ± 0.5; c3=80.2 ± 0.3; c4=77.5 ± 0.4\nNotes: †On Citeseer, AHGNN and GAT achieve the same mean (72.3%)."
+  },
+  {
+    "id": "HAGNN论文.pdf::tV",
+    "file": "HAGNN论文.pdf",
+    "location": "第 3 页，Table V",
+    "chunk": "V",
+    "section": "body",
+    "kind": "table",
+    "table": {
+      "reference": "Table V",
+      "caption": "LINK PREDICTION AUC (%) OVER 5 INDEPENDENT RUNS",
+      "headers": [
+        "Model",
+        "Cora",
+        "Citeseer",
+        "PubMed",
+        "WikiCS"
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "section": "",
+          "cells": [
+            "MLP",
+            "74.3 ± 1.5",
+            "70.5 ± 1.8",
+            "80.1 ± 1.2",
+            "75.0 ± 1.4"
+          ]
+        },
+        {
+          "id": "r2",
+          "section": "",
+          "cells": [
+            "GCN",
+            "90.4 ± 0.8",
+            "89.4 ± 1.1",
+            "96.4 ± 0.5",
+            "90.2 ± 0.7"
+          ]
+        },
+        {
+          "id": "r3",
+          "section": "",
+          "cells": [
+            "GAT",
+            "93.6 ± 0.6",
+            "94.0 ± 0.9",
+            "96.8 ± 0.4",
+            "94.6 ± 0.6"
+          ]
+        },
+        {
+          "id": "r4",
+          "section": "",
+          "cells": [
+            "APPNP",
+            "92.1 ± 0.7",
+            "95.1 ± 0.8",
+            "97.4 ± 0.5",
+            "95.8 ± 0.5"
+          ]
+        },
+        {
+          "id": "r5",
+          "section": "",
+          "cells": [
+            "AHGNN",
+            "95.6 ± 0.4",
+            "96.8 ± 0.5",
+            "98.5 ± 0.2",
+            "97.2 ± 0.3"
+          ]
+        }
+      ],
+      "notes": [],
+      "bbox": [
+        311.9779968261719,
+        259.3713073730469,
+        563.0365600585938,
+        328.1884460449219
+      ]
+    },
+    "text": "Table V: LINK PREDICTION AUC (%) OVER 5 INDEPENDENT RUNS\nColumns: c0=Model; c1=Cora; c2=Citeseer; c3=PubMed; c4=WikiCS\nr1: c0=MLP; c1=74.3 ± 1.5; c2=70.5 ± 1.8; c3=80.1 ± 1.2; c4=75.0 ± 1.4\nr2: c0=GCN; c1=90.4 ± 0.8; c2=89.4 ± 1.1; c3=96.4 ± 0.5; c4=90.2 ± 0.7\nr3: c0=GAT; c1=93.6 ± 0.6; c2=94.0 ± 0.9; c3=96.8 ± 0.4; c4=94.6 ± 0.6\nr4: c0=APPNP; c1=92.1 ± 0.7; c2=95.1 ± 0.8; c3=97.4 ± 0.5; c4=95.8 ± 0.5\nr5: c0=AHGNN; c1=95.6 ± 0.4; c2=96.8 ± 0.5; c3=98.5 ± 0.2; c4=97.2 ± 0.3",
+    "retrieval_text": "Table V: LINK PREDICTION AUC (%) OVER 5 INDEPENDENT RUNS\nColumns: c0=Model; c1=Cora; c2=Citeseer; c3=PubMed; c4=WikiCS\nr1: c0=MLP; c1=74.3 ± 1.5; c2=70.5 ± 1.8; c3=80.1 ± 1.2; c4=75.0 ± 1.4\nr2: c0=GCN; c1=90.4 ± 0.8; c2=89.4 ± 1.1; c3=96.4 ± 0.5; c4=90.2 ± 0.7\nr3: c0=GAT; c1=93.6 ± 0.6; c2=94.0 ± 0.9; c3=96.8 ± 0.4; c4=94.6 ± 0.6\nr4: c0=APPNP; c1=92.1 ± 0.7; c2=95.1 ± 0.8; c3=97.4 ± 0.5; c4=95.8 ± 0.5\nr5: c0=AHGNN; c1=95.6 ± 0.4; c2=96.8 ± 0.5; c3=98.5 ± 0.2; c4=97.2 ± 0.3"
+  },
+  {
+    "id": "HAGNN论文.pdf::tVI",
+    "file": "HAGNN论文.pdf",
+    "location": "第 4 页，Table VI",
+    "chunk": "VI",
+    "section": "body",
+    "kind": "table",
+    "table": {
+      "reference": "Table VI",
+      "caption": "ABLATION: DIRECTED VS. UNDIRECTED HIERARCHY OVER 5 INDEPENDENT RUNS",
+      "headers": [
+        "Model Variant",
+        "Cora",
+        "Citeseer",
+        "PubMed",
+        "WikiCS"
+      ],
+      "rows": [
+        {
+          "id": "r1",
+          "section": "Node Classification (Accuracy %)",
+          "cells": [
+            "Undirected (A + AT )",
+            "81.8 ± 0.7",
+            "72.3 ± 0.7",
+            "78.5 ± 0.5",
+            "76.5 ± 0.6"
+          ]
+        },
+        {
+          "id": "r2",
+          "section": "Node Classification (Accuracy %)",
+          "cells": [
+            "Directed (AHGNN)",
+            "83.2 ± 0.4",
+            "72.3 ± 0.5",
+            "80.2 ± 0.3",
+            "77.5 ± 0.4"
+          ]
+        },
+        {
+          "id": "r3",
+          "section": "Link Prediction (AUC %)",
+          "cells": [
+            "Undirected (A + AT )",
+            "93.6 ± 0.6",
+            "94.0 ± 0.9",
+            "96.8 ± 0.4",
+            "94.6 ± 0.6"
+          ]
+        },
+        {
+          "id": "r4",
+          "section": "Link Prediction (AUC %)",
+          "cells": [
+            "Directed (AHGNN)",
+            "95.6 ± 0.4",
+            "96.8 ± 0.5",
+            "98.5 ± 0.2",
+            "97.2 ± 0.3"
+          ]
+        }
+      ],
+      "notes": [],
+      "bbox": [
+        48.9640007019043,
+        87.76268005371094,
+        300.0226135253906,
+        169.32525634765625
+      ]
+    },
+    "text": "Table VI: ABLATION: DIRECTED VS. UNDIRECTED HIERARCHY OVER 5 INDEPENDENT RUNS\nColumns: c0=Model Variant; c1=Cora; c2=Citeseer; c3=PubMed; c4=WikiCS\nr1 [section=Node Classification (Accuracy %)]: c0=Undirected (A + AT ); c1=81.8 ± 0.7; c2=72.3 ± 0.7; c3=78.5 ± 0.5; c4=76.5 ± 0.6\nr2 [section=Node Classification (Accuracy %)]: c0=Directed (AHGNN); c1=83.2 ± 0.4; c2=72.3 ± 0.5; c3=80.2 ± 0.3; c4=77.5 ± 0.4\nr3 [section=Link Prediction (AUC %)]: c0=Undirected (A + AT ); c1=93.6 ± 0.6; c2=94.0 ± 0.9; c3=96.8 ± 0.4; c4=94.6 ± 0.6\nr4 [section=Link Prediction (AUC %)]: c0=Directed (AHGNN); c1=95.6 ± 0.4; c2=96.8 ± 0.5; c3=98.5 ± 0.2; c4=97.2 ± 0.3",
+    "retrieval_text": "Table VI: ABLATION: DIRECTED VS. UNDIRECTED HIERARCHY OVER 5 INDEPENDENT RUNS\nColumns: c0=Model Variant; c1=Cora; c2=Citeseer; c3=PubMed; c4=WikiCS\nr1 [section=Node Classification (Accuracy %)]: c0=Undirected (A + AT ); c1=81.8 ± 0.7; c2=72.3 ± 0.7; c3=78.5 ± 0.5; c4=76.5 ± 0.6\nr2 [section=Node Classification (Accuracy %)]: c0=Directed (AHGNN); c1=83.2 ± 0.4; c2=72.3 ± 0.5; c3=80.2 ± 0.3; c4=77.5 ± 0.4\nr3 [section=Link Prediction (AUC %)]: c0=Undirected (A + AT ); c1=93.6 ± 0.6; c2=94.0 ± 0.9; c3=96.8 ± 0.4; c4=94.6 ± 0.6\nr4 [section=Link Prediction (AUC %)]: c0=Directed (AHGNN); c1=95.6 ± 0.4; c2=96.8 ± 0.5; c3=98.5 ± 0.2; c4=97.2 ± 0.3"
+  },
+  {
+    "id": "文档问答系统设计.txt::c001",
+    "file": "文档问答系统设计.txt",
+    "location": "全文",
+    "chunk": 1,
+    "start_char": 0,
+    "end_char": 410,
+    "text": "## 改进方案与数据结构\n\nEviFlow-Doc 保留文档大纲和按需读取，将证据校验、状态调度与记忆更新分开管理。该方案属于系统设计，不涉及重新训练基础模型，尚未验证其性能。\n\n文档对象保存标识、版本、页码和解析器版本；证据对象保存原始元素位置、数值、单位与来源调用；断言对象保存命题、支持证据和冲突证据。引用必须能回到确定版本的原文或页图，不能将模型摘要直接作为原始事实。证据间的包含、支持、冲突关系可用邻接表或关系表记录，无需预先引入图神经网络。\n\n任务对象保存运行标识、阶段、状态版本、待完成调用、预算和终态原因。调用对象分别保存逻辑调用标识、尝试次数和协议请求标识，以匹配重试结果。等待工具时还需记录恢复阶段，区分执行智能体检索与复核补充取证。\n\n## 取证、复核与答案约束\n\n动作选择优先补充尚未支持的关键断言。关键词无结果时扩展标题或相邻章节；数字冲突时读取原表和页图；同一版本、同一参数的成功结果可复用。",
+    "section": "body",
+    "retrieval_text": "## 改进方案与数据结构 EviFlow-Doc 保留文档大纲和按需读取，将证据校验、状态调度与记忆更新分开管理。该方案属于系统设计，不涉及重新训练基础模型，尚未验证其性能。 文档对象保存标识、版本、页码和解析器版本；证据对象保存原始元素位置、数值、单位与来源调用；断言对象保存命题、支持证据和冲突证据。引用必须能回到确定版本的原文或页图，不能将模型摘要直接作为原始事实。证据间的包含、支持、冲突关系可用邻接表或关系表记录，无需预先引入图神经网络。 任务对象保存运行标识、阶段、状态版本、待完成调用、预算和终态原因。调用对象分别保存逻辑调用标识、尝试次数和协议请求标识，以匹配重试结果。等待工具时还需记录恢复阶段，区分执行智能体检索与复核补充取证。 ## 取证、复核与答案约束 动作选择优先补充尚未支持的关键断言。关键词无结果时扩展标题或相邻章节；数字冲突时读取原表和页图；同一版本、同一参数的成功结果可复用。"
+  },
+  {
+    "id": "文档问答系统设计.txt::c002",
+    "file": "文档问答系统设计.txt",
+    "location": "全文",
+    "chunk": 2,
+    "start_char": 350,
+    "end_char": 753,
+    "text": "补充尚未支持的关键断言。关键词无结果时扩展标题或相邻章节；数字冲突时读取原表和页图；同一版本、同一参数的成功结果可复用。工具调用、模型轮次、并发量和总时间均设置上限，重试也计入预算，提交前预留资源。\n\n先检查引用是否存在、版本是否一致、数字和单位能否复算。证据缺失、跨页依据不足或多模态冲突时，再调用模型定向复核。复核记录修正依据和新增证据，次数受预算约束，不允许无限往返。\n\n答案交付要求关键断言均有支持、版本与单位一致，且无未解决冲突。部分问题证据不足时可分项作答并说明缺口。材料不足、系统失败和预算耗尽分别记录，避免混为同一种拒答原因。模型判断通过仍不构成形式化正确性证明。\n\n## 状态调度与故障恢复\n\n状态更新、事件去重记录和待发命令在同一事务内提交，模型请求和网络 I/O 在事务外执行。调度伪代码如下：\n\n内存通知只负责唤醒，持久记录支持重启恢复；队列满时暂停领取或持久排队，不丢弃完成事件。",
+    "section": "body",
+    "retrieval_text": "补充尚未支持的关键断言。关键词无结果时扩展标题或相邻章节；数字冲突时读取原表和页图；同一版本、同一参数的成功结果可复用。工具调用、模型轮次、并发量和总时间均设置上限，重试也计入预算，提交前预留资源。 先检查引用是否存在、版本是否一致、数字和单位能否复算。证据缺失、跨页依据不足或多模态冲突时，再调用模型定向复核。复核记录修正依据和新增证据，次数受预算约束，不允许无限往返。 答案交付要求关键断言均有支持、版本与单位一致，且无未解决冲突。部分问题证据不足时可分项作答并说明缺口。材料不足、系统失败和预算耗尽分别记录，避免混为同一种拒答原因。模型判断通过仍不构成形式化正确性证明。 ## 状态调度与故障恢复 状态更新、事件去重记录和待发命令在同一事务内提交，模型请求和网络 I/O 在事务外执行。调度伪代码如下： 内存通知只负责唤醒，持久记录支持重启恢复；队列满时暂停领取或持久排队，不丢弃完成事件。"
+  },
+  {
+    "id": "文档问答系统设计.txt::c003",
+    "file": "文档问答系统设计.txt",
+    "location": "全文",
+    "chunk": 3,
+    "start_char": 693,
+    "end_char": 1091,
+    "text": "在事务外执行。调度伪代码如下：\n\n内存通知只负责唤醒，持久记录支持重启恢复；队列满时暂停领取或持久排队，不丢弃完成事件。外部操作完成而命令尚未确认时，进程崩溃仍可能引起重试。因此，去重和事务不自动保证端到端恰好一次，写工具需由服务端实施幂等控制。全局期限由独立检查推进，不能仅依赖工具返回后检查循环次数。\n\n记忆分为文档事实缓存与通用阅读规则。前者绑定文档版本和权限，后者经独立样例检查后启用，并保留来源、适用范围、版本及撤销记录。错误文本和未经核查的复核结论不直接写入通用记忆。\n\n## 实现与验证\n\n实现顺序为本地文档工具、状态控制器与持久存储、MCP 适配、证据校验和复核。Java 负责控制器或界面，Python 文档组件可继续复用。先完成单进程原型，再根据并发与恢复需求扩展基础设施。\n\n评测以原 DocAgent 为基线，依次加入事件调度、证据约束、定向复核和受控记忆，比较各项改动。",
+    "section": "body",
+    "retrieval_text": "在事务外执行。调度伪代码如下： 内存通知只负责唤醒，持久记录支持重启恢复；队列满时暂停领取或持久排队，不丢弃完成事件。外部操作完成而命令尚未确认时，进程崩溃仍可能引起重试。因此，去重和事务不自动保证端到端恰好一次，写工具需由服务端实施幂等控制。全局期限由独立检查推进，不能仅依赖工具返回后检查循环次数。 记忆分为文档事实缓存与通用阅读规则。前者绑定文档版本和权限，后者经独立样例检查后启用，并保留来源、适用范围、版本及撤销记录。错误文本和未经核查的复核结论不直接写入通用记忆。 ## 实现与验证 实现顺序为本地文档工具、状态控制器与持久存储、MCP 适配、证据校验和复核。Java 负责控制器或界面，Python 文档组件可继续复用。先完成单进程原型，再根据并发与恢复需求扩展基础设施。 评测以原 DocAgent 为基线，依次加入事件调度、证据约束、定向复核和受控记忆，比较各项改动。"
+  },
+  {
+    "id": "文档问答系统设计.txt::c004",
+    "file": "文档问答系统设计.txt",
+    "location": "全文",
+    "chunk": 4,
+    "start_char": 1031,
+    "end_char": 1349,
+    "text": "需求扩展基础设施。\n\n评测以原 DocAgent 为基线，依次加入事件调度、证据约束、定向复核和受控记忆，比较各项改动。模型、数据和预算保持可比；按文档及其版本族划分开发集与测试集，测试前冻结规则和记忆，避免答案泄漏。\n\n除问答准确率外，记录引用精确率、关键断言覆盖率、回答覆盖率、已回答部分错误率，以及复核纠正率和误改率。效率统计累计输入输出量、工具次数、平均与 P95 延迟，并计入解析成本。引用指标分母为零时单列统计，不能记为满分。\n\n故障测试覆盖重复及乱序结果、超时与完成竞争、取消后的迟到结果、重启恢复、页码边界、非法参数、越权访问及文档提示注入。只有在上述对照和故障测试完成后，才能评价方案对准确性、成本及可靠性的实际影响。",
+    "section": "body",
+    "retrieval_text": "需求扩展基础设施。 评测以原 DocAgent 为基线，依次加入事件调度、证据约束、定向复核和受控记忆，比较各项改动。模型、数据和预算保持可比；按文档及其版本族划分开发集与测试集，测试前冻结规则和记忆，避免答案泄漏。 除问答准确率外，记录引用精确率、关键断言覆盖率、回答覆盖率、已回答部分错误率，以及复核纠正率和误改率。效率统计累计输入输出量、工具次数、平均与 P95 延迟，并计入解析成本。引用指标分母为零时单列统计，不能记为满分。 故障测试覆盖重复及乱序结果、超时与完成竞争、取消后的迟到结果、重启恢复、页码边界、非法参数、越权访问及文档提示注入。只有在上述对照和故障测试完成后，才能评价方案对准确性、成本及可靠性的实际影响。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c001",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 1,
+    "start_char": 0,
+    "end_char": 359,
+    "text": "# 软件设计学习笔记（已有报告摘录）\n\n## 普通调用、回调与监听\n\n普通方法调用由调用方明确指定操作，结果沿调用栈返回。例如，客户端调用 process(text) 后取得处理结果，再决定后续操作。调用方可以依赖接口，因此直接调用并不必然造成较强耦合。\n\n回调将后续处理行为作为参数或配置交给另一组件，由该组件在约定时机调用。Java 可用接口对象、匿名类、Lambda 或方法引用表示回调。回调是否异步取决于调用方式，Lambda 本身不会创建线程。\n\n监听机制先将处理器注册到事件源，事件发生后，事件源向监听器传递事件对象并调用处理方法。它适合长期订阅及一对多通知。监听通常通过回调实现，回调最终仍由方法调用完成，三者存在包含关系，并非互斥的底层机制。\n\n## Action 与 ActionListener",
+    "section": "body",
+    "retrieval_text": "# 软件设计学习笔记（已有报告摘录） ## 普通调用、回调与监听 普通方法调用由调用方明确指定操作，结果沿调用栈返回。例如，客户端调用 process(text) 后取得处理结果，再决定后续操作。调用方可以依赖接口，因此直接调用并不必然造成较强耦合。 回调将后续处理行为作为参数或配置交给另一组件，由该组件在约定时机调用。Java 可用接口对象、匿名类、Lambda 或方法引用表示回调。回调是否异步取决于调用方式，Lambda 本身不会创建线程。 监听机制先将处理器注册到事件源，事件发生后，事件源向监听器传递事件对象并调用处理方法。它适合长期订阅及一对多通知。监听通常通过回调实现，回调最终仍由方法调用完成，三者存在包含关系，并非互斥的底层机制。 ## Action 与 ActionListener"
+  },
+  {
+    "id": "软件设计学习笔记.md::c002",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 2,
+    "start_char": 299,
+    "end_char": 702,
+    "text": "最终仍由方法调用完成，三者存在包含关系，并非互斥的底层机制。\n\n## Action 与 ActionListener\n\n题目中的 ActionEvent、ActionListener 和 Swing Action 属于 Java SE 桌面 API。ActionEvent 保存事件来源、动作命令等信息；ActionListener 定义接收方法 actionPerformed(ActionEvent e)。Action 扩展监听接口，将执行行为与名称、图标、提示和启用状态等属性组织在一起，AbstractAction 提供其基础实现。\n\n按钮通过 addActionListener 注册处理器，用户动作发生后调用其 actionPerformed 方法。按钮和菜单还可绑定同一个 Action，共享行为及其支持的属性。例如，action.setEnabled(false) 可以使关联入口同时禁用。",
+    "section": "body",
+    "retrieval_text": "最终仍由方法调用完成，三者存在包含关系，并非互斥的底层机制。 ## Action 与 ActionListener 题目中的 ActionEvent、ActionListener 和 Swing Action 属于 Java SE 桌面 API。ActionEvent 保存事件来源、动作命令等信息；ActionListener 定义接收方法 actionPerformed(ActionEvent e)。Action 扩展监听接口，将执行行为与名称、图标、提示和启用状态等属性组织在一起，AbstractAction 提供其基础实现。 按钮通过 addActionListener 注册处理器，用户动作发生后调用其 actionPerformed 方法。按钮和菜单还可绑定同一个 Action，共享行为及其支持的属性。例如，action.setEnabled(false) 可以使关联入口同时禁用。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c003",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 3,
+    "start_char": 642,
+    "end_char": 1043,
+    "text": "Action，共享行为及其支持的属性。例如，action.setEnabled(false) 可以使关联入口同时禁用。动作执行与属性更新是两条通知过程：组件调用动作执行操作，动作的属性变化通知组件更新状态。\n\nSwing 界面事件通常在事件分派线程（EDT）处理。耗时操作应放入后台任务，界面更新返回 EDT。ActionListener 接口本身不保证运行线程，自定义事件源直接调用监听器时，监听器仍在发布线程执行。\n\n## 代码实现与运行结果\n\n## 三种处理方式\n\n以下程序用同一个业务函数比较三种方式。业务函数仅校验和规范化输入，不调用外部服务。\n\nwithCallback 只捕获业务函数的异常。成功回调在 try 外执行，避免将回调自身的错误误报为业务失败。事件源同步遍历监听器，单个监听器抛出 RuntimeException 时记录错误并继续通知，其异常处理器按约定不得再次抛错。",
+    "section": "body",
+    "retrieval_text": "Action，共享行为及其支持的属性。例如，action.setEnabled(false) 可以使关联入口同时禁用。动作执行与属性更新是两条通知过程：组件调用动作执行操作，动作的属性变化通知组件更新状态。 Swing 界面事件通常在事件分派线程（EDT）处理。耗时操作应放入后台任务，界面更新返回 EDT。ActionListener 接口本身不保证运行线程，自定义事件源直接调用监听器时，监听器仍在发布线程执行。 ## 代码实现与运行结果 ## 三种处理方式 以下程序用同一个业务函数比较三种方式。业务函数仅校验和规范化输入，不调用外部服务。 withCallback 只捕获业务函数的异常。成功回调在 try 外执行，避免将回调自身的错误误报为业务失败。事件源同步遍历监听器，单个监听器抛出 RuntimeException 时记录错误并继续通知，其异常处理器按约定不得再次抛错。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c004",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 4,
+    "start_char": 983,
+    "end_char": 1398,
+    "text": "遍历监听器，单个监听器抛出 RuntimeException 时记录错误并继续通知，其异常处理器按约定不得再次抛错。\n\nCopyOnWriteArrayList 的迭代器使用快照，分发期间新注册的监听器从后续事件开始接收通知；addIfAbsent 防止重复注册。该结构适合通知频繁、注册变化较少的情况，但不保证监听器内部状态线程安全。\n\n## 共享动作与后台任务\n\n下列程序将按钮、菜单和快捷键绑定到同一动作。执行前在 EDT 保存输入快照并禁用入口；doInBackground 处理数据；done 显示结果并恢复动作。150 毫秒等待只用于模拟 I/O。\n\n## 运行结果\n\n两个示例文件及检查程序 SelfTest.java 放在同一目录，使用 JDK 21 编译运行：\n\\par\\noindent\\begin{minipage}{\\linewidth}\n\n\\end{minipage}\\par\n最后一条命令需要图形桌面。",
+    "section": "body",
+    "retrieval_text": "遍历监听器，单个监听器抛出 RuntimeException 时记录错误并继续通知，其异常处理器按约定不得再次抛错。 CopyOnWriteArrayList 的迭代器使用快照，分发期间新注册的监听器从后续事件开始接收通知；addIfAbsent 防止重复注册。该结构适合通知频繁、注册变化较少的情况，但不保证监听器内部状态线程安全。 ## 共享动作与后台任务 下列程序将按钮、菜单和快捷键绑定到同一动作。执行前在 EDT 保存输入快照并禁用入口；doInBackground 处理数据；done 显示结果并恢复动作。150 毫秒等待只用于模拟 I/O。 ## 运行结果 两个示例文件及检查程序 SelfTest.java 放在同一目录，使用 JDK 21 编译运行： \\par\\noindent\\begin{minipage}{\\linewidth} \\end{minipage}\\par 最后一条命令需要图形桌面。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c005",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 5,
+    "start_char": 1338,
+    "end_char": 1732,
+    "text": "egin{minipage}{\\linewidth}\n\n\\end{minipage}\\par\n最后一条命令需要图形桌面。控制台示例输出如下：\n\n三种方式得到相同结果，监听器在发布线程 main 中执行。17 项自动化检查通过，覆盖回调、注册与注销、分发语义、共享动作及后台更新；编译无警告。未进行远程调用和桌面交互验收。\n\n## 比较与适用场景\n\n对“校验后保存”等强依赖，应在服务或工作流中明确顺序，不依赖独立监听器的注册次序。页面或任务结束后应注销相应监听器，避免无效通知和对象长期保留。\n\n单线程同步分发中，若有 $k$ 个监听器，第 $i$ 个监听器耗时为 $t_i$，则总耗时近似为\n\nT=T_{\\text{事件构造}}+T_{\\text{遍历}}+\\sum_{i=1}^{k}t_i.\n\n异步分发增加队列和线程协调成本，可减少调用方等待或重叠 I/O，但不保证降低总耗时。",
+    "section": "body",
+    "retrieval_text": "egin{minipage}{\\linewidth} \\end{minipage}\\par 最后一条命令需要图形桌面。控制台示例输出如下： 三种方式得到相同结果，监听器在发布线程 main 中执行。17 项自动化检查通过，覆盖回调、注册与注销、分发语义、共享动作及后台更新；编译无警告。未进行远程调用和桌面交互验收。 ## 比较与适用场景 对“校验后保存”等强依赖，应在服务或工作流中明确顺序，不依赖独立监听器的注册次序。页面或任务结束后应注销相应监听器，避免无效通知和对象长期保留。 单线程同步分发中，若有 $k$ 个监听器，第 $i$ 个监听器耗时为 $t_i$，则总耗时近似为 T=T_{\\text{事件构造}}+T_{\\text{遍历}}+\\sum_{i=1}^{k}t_i. 异步分发增加队列和线程协调成本，可减少调用方等待或重叠 I/O，但不保证降低总耗时。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c006",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 6,
+    "start_char": 1672,
+    "end_char": 2068,
+    "text": "_{i=1}^{k}t_i.\n\n异步分发增加队列和线程协调成本，可减少调用方等待或重叠 I/O，但不保证降低总耗时。\n\n多个异步任务的结果组合可用 CompletableFuture，持续数据流可用支持需求量控制的 Flow，跨进程通知可用发布订阅。非异步的后续处理不保证切换线程，发布订阅也不自动提供可靠送达或恰好一次执行。\n\n## DocAgent 调度与模型改进\n\n## 智能体调度与 MCP 调用\n\n## DocAgent 的执行过程\n\nDocAgent 先将文档解析为树形大纲，再由执行智能体按需读取正文、图片和表格并作答；复核智能体补充核查，反思阶段更新阅读指导。大纲提供章节及元素定位，五个工具分别执行关键词搜索、章节读取、图片读取、页图读取和表格图像读取。\n\n作者代码中的 run_experiment.py 顺序调用执行智能体和复核智能体；两者答案字符串不同时调用反思阶段。",
+    "section": "body",
+    "retrieval_text": "_{i=1}^{k}t_i. 异步分发增加队列和线程协调成本，可减少调用方等待或重叠 I/O，但不保证降低总耗时。 多个异步任务的结果组合可用 CompletableFuture，持续数据流可用支持需求量控制的 Flow，跨进程通知可用发布订阅。非异步的后续处理不保证切换线程，发布订阅也不自动提供可靠送达或恰好一次执行。 ## DocAgent 调度与模型改进 ## 智能体调度与 MCP 调用 ## DocAgent 的执行过程 DocAgent 先将文档解析为树形大纲，再由执行智能体按需读取正文、图片和表格并作答；复核智能体补充核查，反思阶段更新阅读指导。大纲提供章节及元素定位，五个工具分别执行关键词搜索、章节读取、图片读取、页图读取和表格图像读取。 作者代码中的 run_experiment.py 顺序调用执行智能体和复核智能体；两者答案字符串不同时调用反思阶段。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c007",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 7,
+    "start_char": 2008,
+    "end_char": 2421,
+    "text": "作者代码中的 run_experiment.py 顺序调用执行智能体和复核智能体；两者答案字符串不同时调用反思阶段。run_agent 请求模型、读取工具调用、执行工具并回填结果，随后继续请求模型。get_reply_for_tool 按工具名分支调用本地 DocReader 方法。该调用路径使用普通函数调用，未实现 MCP 初始化、工具发现或工具调用协议。\n\n两个智能体通过不同提示和上下文分工，不要求使用不同模型权重。记忆是加入后续提示的字符串，更新记忆不涉及反向传播或模型参数训练。\n\n## ActionListener 的适用范围\n\nActionListener 可以作为任务启动和完成通知的入口。监听器接到事件后调用调度逻辑，由调度逻辑判断任务依赖、剩余预算和当前状态，再安排后续任务。接口只规定通知方法，不提供这些判断规则。\n\n调度过程可表示为\n\n\\delta(s,e)=(s',\\mathcal C),",
+    "section": "body",
+    "retrieval_text": "作者代码中的 run_experiment.py 顺序调用执行智能体和复核智能体；两者答案字符串不同时调用反思阶段。run_agent 请求模型、读取工具调用、执行工具并回填结果，随后继续请求模型。get_reply_for_tool 按工具名分支调用本地 DocReader 方法。该调用路径使用普通函数调用，未实现 MCP 初始化、工具发现或工具调用协议。 两个智能体通过不同提示和上下文分工，不要求使用不同模型权重。记忆是加入后续提示的字符串，更新记忆不涉及反向传播或模型参数训练。 ## ActionListener 的适用范围 ActionListener 可以作为任务启动和完成通知的入口。监听器接到事件后调用调度逻辑，由调度逻辑判断任务依赖、剩余预算和当前状态，再安排后续任务。接口只规定通知方法，不提供这些判断规则。 调度过程可表示为 \\delta(s,e)=(s',\\mathcal C),"
+  },
+  {
+    "id": "软件设计学习笔记.md::c008",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 8,
+    "start_char": 2361,
+    "end_char": 2775,
+    "text": "只规定通知方法，不提供这些判断规则。\n\n调度过程可表示为\n\n\\delta(s,e)=(s',\\mathcal C),\n\n其中 $s$ 为当前状态，$e$ 为到达事件，$s'$ 为更新后的状态，$\\mathcal C$ 为待执行命令。监听器传递事件，状态机验证事件是否属于当前运行和调用，再决定状态变化与新命令。\n\n界面可保留 Action，后台宜采用与 Swing 无关的类型化事件，保存运行标识、逻辑调用标识、尝试次数、请求标识和结果。界面禁用状态不能替代服务端权限校验或并发控制。\n\n互不依赖的只读请求可以并发执行；需要初稿的复核应在初稿完成后开始。远程调用放在受控执行器中，不在 EDT 或持有状态锁时等待网络结果。同一运行的状态更新应串行处理，或通过事务版本校验防止重复推进。\n\n## MCP 的调用方式\n\nMCP 由宿主应用、客户端和服务端组成。宿主应用管理模型上下文与权限，客户端维护协议连接，服务端暴露工具等能力。",
+    "section": "body",
+    "retrieval_text": "只规定通知方法，不提供这些判断规则。 调度过程可表示为 \\delta(s,e)=(s',\\mathcal C), 其中 $s$ 为当前状态，$e$ 为到达事件，$s'$ 为更新后的状态，$\\mathcal C$ 为待执行命令。监听器传递事件，状态机验证事件是否属于当前运行和调用，再决定状态变化与新命令。 界面可保留 Action，后台宜采用与 Swing 无关的类型化事件，保存运行标识、逻辑调用标识、尝试次数、请求标识和结果。界面禁用状态不能替代服务端权限校验或并发控制。 互不依赖的只读请求可以并发执行；需要初稿的复核应在初稿完成后开始。远程调用放在受控执行器中，不在 EDT 或持有状态锁时等待网络结果。同一运行的状态更新应串行处理，或通过事务版本校验防止重复推进。 ## MCP 的调用方式 MCP 由宿主应用、客户端和服务端组成。宿主应用管理模型上下文与权限，客户端维护协议连接，服务端暴露工具等能力。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c009",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 9,
+    "start_char": 2715,
+    "end_char": 3127,
+    "text": "方式\n\nMCP 由宿主应用、客户端和服务端组成。宿主应用管理模型上下文与权限，客户端维护协议连接，服务端暴露工具等能力。将 DocAgent 接入 MCP 时，可保留角色逻辑，将 DocReader 封装为文档工具服务；此处属于改造方案。协议采用 2025-11-25 版本。\n\n基本流程为：客户端发送 initialize 协商版本和能力，接收响应后发送 notifications/initialized；随后用 tools/list 取得工具名称及参数结构，用 tools/call 调用工具，按请求标识匹配结果。工具列表分页时需继续获取后续页。\n\n下面按顺序列出初始化消息，消息内容为示例：\n\n工具发现返回的 inputSchema 规定参数类型和必填项，宿主应用在调用前校验参数及用户权限。下例读取授权文档的指定版本和章节；这些文档范围参数由服务封装提供。\n\n上例省略了工具列表响应，发现与调用仍应按协议顺序完成。",
+    "section": "body",
+    "retrieval_text": "方式 MCP 由宿主应用、客户端和服务端组成。宿主应用管理模型上下文与权限，客户端维护协议连接，服务端暴露工具等能力。将 DocAgent 接入 MCP 时，可保留角色逻辑，将 DocReader 封装为文档工具服务；此处属于改造方案。协议采用 2025-11-25 版本。 基本流程为：客户端发送 initialize 协商版本和能力，接收响应后发送 notifications/initialized；随后用 tools/list 取得工具名称及参数结构，用 tools/call 调用工具，按请求标识匹配结果。工具列表分页时需继续获取后续页。 下面按顺序列出初始化消息，消息内容为示例： 工具发现返回的 inputSchema 规定参数类型和必填项，宿主应用在调用前校验参数及用户权限。下例读取授权文档的指定版本和章节；这些文档范围参数由服务封装提供。 上例省略了工具列表响应，发现与调用仍应按协议顺序完成。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c010",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 10,
+    "start_char": 3067,
+    "end_char": 3460,
+    "text": "读取授权文档的指定版本和章节；这些文档范围参数由服务封装提供。\n\n上例省略了工具列表响应，发现与调用仍应按协议顺序完成。返回值可包含文本、图像等内容，也可提供 structuredContent。工具声明输出结构时，结果应符合该结构。MCP 请求标识与模型产生的工具调用标识分别使用，适配器保存两者映射，再将结果写回相应模型上下文。\n\n协议通知不要求响应。工具列表变化通知用于刷新工具信息，进度通知描述已有请求的进展，不代表最终结果。2025-11-25 版本的长任务机制仍为需协商的实验性能力，可查询状态、取得结果和取消任务；它不负责安排执行智能体与复核智能体的先后关系。\n\n标准传输包括标准输入输出（stdio）和可流式 HTTP。stdio 通常连接本地子进程，每条消息编码为一行，日志写入标准错误流；上面的分行 JSON 仅用于展示。可流式 HTTP 可借助 SSE 传递消息。",
+    "section": "body",
+    "retrieval_text": "读取授权文档的指定版本和章节；这些文档范围参数由服务封装提供。 上例省略了工具列表响应，发现与调用仍应按协议顺序完成。返回值可包含文本、图像等内容，也可提供 structuredContent。工具声明输出结构时，结果应符合该结构。MCP 请求标识与模型产生的工具调用标识分别使用，适配器保存两者映射，再将结果写回相应模型上下文。 协议通知不要求响应。工具列表变化通知用于刷新工具信息，进度通知描述已有请求的进展，不代表最终结果。2025-11-25 版本的长任务机制仍为需协商的实验性能力，可查询状态、取得结果和取消任务；它不负责安排执行智能体与复核智能体的先后关系。 标准传输包括标准输入输出（stdio）和可流式 HTTP。stdio 通常连接本地子进程，每条消息编码为一行，日志写入标准错误流；上面的分行 JSON 仅用于展示。可流式 HTTP 可借助 SSE 传递消息。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c011",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 11,
+    "start_char": 3400,
+    "end_char": 3808,
+    "text": "，每条消息编码为一行，日志写入标准错误流；上面的分行 JSON 仅用于展示。可流式 HTTP 可借助 SSE 传递消息。传输协议、异步结果对象和本地监听分别处理消息交换、结果等待和事件通知，可组合使用。\n\n## 失败处理与安全限制\n\n协议错误与工具业务失败应分别处理：畸形请求等使用 JSON-RPC 错误，工具执行失败可返回 isError=true。收到 result 不一定意味着业务成功。\n\n调用超时只说明本地停止等待，不证明远端停止执行。普通请求通过取消通知申请停止，长任务使用 tasks/cancel；取消与完成可能竞争，迟到结果不能重新激活终态任务。\n\n暂时性故障可有限重试，参数错误应先修正参数。每次尝试使用独立请求标识，逻辑调用标识保持不变。写入工具还需业务幂等键，新的请求标识不能阻止重复副作用。文档读取固定版本，避免重试时混入不同版本的内容。\n\n宿主应用和服务端分别校验工具、参数及文档权限。",
+    "section": "body",
+    "retrieval_text": "，每条消息编码为一行，日志写入标准错误流；上面的分行 JSON 仅用于展示。可流式 HTTP 可借助 SSE 传递消息。传输协议、异步结果对象和本地监听分别处理消息交换、结果等待和事件通知，可组合使用。 ## 失败处理与安全限制 协议错误与工具业务失败应分别处理：畸形请求等使用 JSON-RPC 错误，工具执行失败可返回 isError=true。收到 result 不一定意味着业务成功。 调用超时只说明本地停止等待，不证明远端停止执行。普通请求通过取消通知申请停止，长任务使用 tasks/cancel；取消与完成可能竞争，迟到结果不能重新激活终态任务。 暂时性故障可有限重试，参数错误应先修正参数。每次尝试使用独立请求标识，逻辑调用标识保持不变。写入工具还需业务幂等键，新的请求标识不能阻止重复副作用。文档读取固定版本，避免重试时混入不同版本的内容。 宿主应用和服务端分别校验工具、参数及文档权限。"
+  },
+  {
+    "id": "软件设计学习笔记.md::c012",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 12,
+    "start_char": 3748,
+    "end_char": 4165,
+    "text": "识不能阻止重复副作用。文档读取固定版本，避免重试时混入不同版本的内容。\n\n宿主应用和服务端分别校验工具、参数及文档权限。文档与工具输出中的指令作为不可信内容处理，不能改变系统权限；敏感操作保留用户确认。远程连接按授权要求部署，本地 HTTP 服务校验请求来源并限制绑定地址。\n\n## DocAgent 的评价与改进\n\n## 优点与实验结果\n\n树形大纲使章节和元素可定位，减少无目的读取；多模态工具允许核对正文、表格和图片；执行与复核分工便于分析检索不足、解释错误和误改等问题。文字记忆可将阅读经验传递给后续任务，但其有效性取决于规则质量。\n\n表中为论文报告值，未作重复实验。最后一行按表值计算为 $79.9-63.1=16.8$ 个百分点，与原文相关段落的 15.2 不一致。表9中延迟从 10.6 秒降至 6.5 秒，降幅约为 38.7%，与邻近文字的 30% 也有出入。这里按表值引用，不推测差异原因。\n\n## 局限与实现问题",
+    "section": "body",
+    "retrieval_text": "识不能阻止重复副作用。文档读取固定版本，避免重试时混入不同版本的内容。 宿主应用和服务端分别校验工具、参数及文档权限。文档与工具输出中的指令作为不可信内容处理，不能改变系统权限；敏感操作保留用户确认。远程连接按授权要求部署，本地 HTTP 服务校验请求来源并限制绑定地址。 ## DocAgent 的评价与改进 ## 优点与实验结果 树形大纲使章节和元素可定位，减少无目的读取；多模态工具允许核对正文、表格和图片；执行与复核分工便于分析检索不足、解释错误和误改等问题。文字记忆可将阅读经验传递给后续任务，但其有效性取决于规则质量。 表中为论文报告值，未作重复实验。最后一行按表值计算为 $79.9-63.1=16.8$ 个百分点，与原文相关段落的 15.2 不一致。表9中延迟从 10.6 秒降至 6.5 秒，降幅约为 38.7%，与邻近文字的 30% 也有出入。这里按表值引用，不推测差异原因。 ## 局限与实现问题"
+  },
+  {
+    "id": "软件设计学习笔记.md::c013",
+    "file": "软件设计学习笔记.md",
+    "location": "全文",
+    "chunk": 13,
+    "start_char": 4105,
+    "end_char": 4428,
+    "text": "秒，降幅约为 38.7%，与邻近文字的 30% 也有出入。这里按表值引用，不推测差异原因。\n\n## 局限与实现问题\n\n多轮读取和复核增加延迟，较短的单次上下文也不等于较低的累计请求成本。原文讨论了通用模型领域知识不足和仅在英语数据上评估的限制，并考察了结构扰动与任务顺序；中文技术文档、跨版本资料及恶意内容仍需补充验证。\n\n复核可能修正初稿，也可能将正确答案改错。设初稿正确率为 $p$，错误初稿被修正的条件概率为 $r$，正确初稿被改错的条件概率为 $f$，则\n\np'=p(1-f)+(1-p)r,\\qquad p'-p=(1-p)r-pf.\n\n复核有收益的条件是 $(1-p)r>pf$。两个角色给出一致答案不能证明正确，其证据也可能同源。",
+    "section": "body",
+    "retrieval_text": "秒，降幅约为 38.7%，与邻近文字的 30% 也有出入。这里按表值引用，不推测差异原因。 ## 局限与实现问题 多轮读取和复核增加延迟，较短的单次上下文也不等于较低的累计请求成本。原文讨论了通用模型领域知识不足和仅在英语数据上评估的限制，并考察了结构扰动与任务顺序；中文技术文档、跨版本资料及恶意内容仍需补充验证。 复核可能修正初稿，也可能将正确答案改错。设初稿正确率为 $p$，错误初稿被修正的条件概率为 $r$，正确初稿被改错的条件概率为 $f$，则 p'=p(1-f)+(1-p)r,\\qquad p'-p=(1-p)r-pf. 复核有收益的条件是 $(1-p)r>pf$。两个角色给出一致答案不能证明正确，其证据也可能同源。"
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "bm25": {
+    "correct": 16,
+    "n": 20,
+    "accuracy": 0.8,
+    "hallucinations": 0,
+    "trap_n": 5,
+    "hallucination_rate": 0.0,
+    "hit_at_3": 13,
+    "answerable_n": 15,
+    "retrieval_hit_rate": 0.8666666666666667,
+    "all_evidence_hit_rate": 0.6666666666666666,
+    "mean_first_complete_answer_seconds": 4.95472,
+    "by_type": {
+      "answerable": {
+        "correct": 10,
+        "n": 10
+      },
+      "unanswerable": {
+        "correct": 4,
+        "n": 5
+      },
+      "multihop": {
+        "correct": 2,
+        "n": 5
+      }
+    },
+    "scoring_source": "user_authorized_ai_review_with_user_spot_checks",
+    "scoring_provenance": "scoring-provenance.json"
+  },
+  "vector": {
+    "correct": 18,
+    "n": 20,
+    "accuracy": 0.9,
+    "hallucinations": 0,
+    "trap_n": 5,
+    "hallucination_rate": 0.0,
+    "hit_at_3": 13,
+    "answerable_n": 15,
+    "retrieval_hit_rate": 0.8666666666666667,
+    "all_evidence_hit_rate": 0.6666666666666666,
+    "mean_first_complete_answer_seconds": 5.6964749999999995,
+    "by_type": {
+      "answerable": {
+        "correct": 10,
+        "n": 10
+      },
+      "unanswerable": {
+        "correct": 5,
+        "n": 5
+      },
+      "multihop": {
+        "correct": 3,
+        "n": 5
+      }
+    },
+    "scoring_source": "user_authorized_ai_review_with_user_spot_checks",
+    "scoring_provenance": "scoring-provenance.json"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "run": "run-20261008-102913",
+  "scored_at": "2026-10-08T14:25:47",
+  "status": "final_at_user_request",
+  "source": "user_authorized_ai_review_with_user_spot_checks",
+  "label": "用户抽查意见 + 用户授权的AI逐题复核",
+  "grader": "Codex",
+  "independent_exhaustive_human_annotation": false,
+  "authorization": "用户明确要求AI扫描结果、结合其评价打分，并将此评分作为最终结果。",
+  "user_feedback": "用户认为Q16 BM25错误；Q19两方法遗漏属于H的条件；其余粗看较好。",
+  "clarifications": [
+    "Q16 BM25数值和差值正确，判错原因是无依据的显著性结论。",
+    "Q19公式h∈H约束候选权威节点h，而非目标节点v；不改动已批准题目或原始输出。"
+  ],
+  "rubric": [
+    "题目明确要求的关键部分完整、正确且有资料支持记1，否则记0，不给部分分。",
+    "接受同义表述、等价公式和百分数写法，不要求逐字复制标准答案的额外背景。",
+    "可答题误拒答及格式/引用拦截记0；正常资料不足拒答记1。",
+    "幻觉率仅统计五道无答案题的最终交付是否编造；格式失败不等于成功拒答，也不自动等于幻觉。"
+  ],
+  "limitations": "题目与评分均有AI参与，用户只做部分抽查；不是独立盲评或本人逐条人工标注。评分不修改原始答案。"
+}
