@@ -88,6 +88,30 @@ class Worker:
             self.process.stdin.flush()
             return self._receive(180)
 
+    def stream(self, on_text, **request):
+        request_id = uuid.uuid4().hex
+        with self.lock:
+            def send(value):
+                self.process.stdin.write(json.dumps(value, ensure_ascii=False) + "\n")
+                self.process.stdin.flush()
+
+            send({**request, "stream": True, "request_id": request_id})
+            cancelled = False
+            while True:
+                try:
+                    result = self._receive(180)
+                    if result.get("request_id") != request_id:
+                        raise RuntimeError("模型响应编号不匹配 请重新启动")
+                    if result.get("event") == "done":
+                        result["cancelled"] = cancelled or result.get("cancelled", False)
+                        return result
+                    if result.get("event") == "text" and not cancelled:
+                        on_text(result["text"])
+                except KeyboardInterrupt:
+                    if not cancelled:
+                        cancelled = True
+                        send({"op": "cancel", "request_id": request_id})
+
     def embed(self, texts, query=False):
         return np.asarray(self.call(op="embed", texts=texts,
                                     prefix="query: " if query else "passage: ")["vectors"], dtype=np.float32)

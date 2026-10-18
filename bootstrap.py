@@ -49,7 +49,9 @@ def prepare_config(configure=False):
 
 
 def check_frontend(wheel_dir=None):
-    missing = [name for name in ("numpy", "fitz") if importlib.util.find_spec(name) is None]
+    missing = [name for name in ("numpy", "fitz", "rich", "prompt_toolkit") if importlib.util.find_spec(name) is None]
+    if missing and wheel_dir is None:
+        wheel_dir = ROOT / "vendor" / "wheels"
     if missing and wheel_dir:
         wheels = Path(wheel_dir).resolve()
         if not wheels.is_dir():
@@ -98,7 +100,7 @@ print(json.dumps({'python':sys.version.split()[0],'torch':torch.__version__,'tra
 
 
 def main():
-    parser = argparse.ArgumentParser(description="配置并启动本地知识库")
+    parser = argparse.ArgumentParser(description="配置并启动本地 Qwen 聊天与知识库")
     parser.add_argument("--configure", action="store_true")
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--wheel-dir")

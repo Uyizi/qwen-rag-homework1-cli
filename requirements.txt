@@ -1,2 +1,6 @@
 numpy==2.1.2
 PyMuPDF==1.28.0
+rich==15.0.0
+markdown-it-py==4.2.0
+mdurl==0.1.2
+prompt-toolkit==3.0.53

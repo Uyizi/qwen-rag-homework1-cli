@@ -2,14 +2,16 @@
 
 软件前沿技术作业1的独立 CLI 代码仓库
 
-支持 PDF、Markdown、TXT 导入以及 BM25 和 E5 向量检索切换
-本地 Qwen 依据检索证据回答并显示出处
-资料不足时拒答，格式或来源校验失败单独记录
+默认使用本地 Qwen 连续聊天，支持流式回答、Markdown 和多轮上下文
+切换到文档模式后，支持 PDF、Markdown、TXT 以及 BM25 和 E5 向量检索
+文档模式依据证据回答并显示出处，资料不足时拒答
 
 ## 目录
 
 ```text
 cli.py                     命令行交互
+terminal_ui.py             流式显示 Markdown 与多行输入
+chat_session.py            聊天上下文 文档切换 评测隔离
 rag.py                     导入 分块 检索 生成与日志
 pdf_structure.py           PDF 表格恢复与数值计算
 evidence_checks.py         证据与条件校验
@@ -25,6 +27,7 @@ eval/questions.json        同一题集的 JSON 版本
 eval/results/              两种方法各20条 CSV 和 JSON
 eval/run-20261008-102913/   完整原始记录 评分 环境与指标
 docs/                      评分依据与代码错误记录
+vendor/wheels/             终端界面依赖的离线安装包及许可证
 ```
 
 ## 运行前提
@@ -48,6 +51,8 @@ Windows 和 WSL 中均需有 Python 环境
 | Windows Python | 3.13.7 |
 | NumPy | 2.1.2 |
 | PyMuPDF | 1.28.0 |
+| Rich | 15.0.0 |
+| prompt-toolkit | 3.0.53 |
 | WSL Python | 3.13.11 |
 | PyTorch | 2.14.0+cu130 |
 | Transformers | 5.17.0 |
@@ -114,14 +119,25 @@ Windows 模型目录会转换为 WSL 路径
 路径也可以通过 `QWEN_WSL_PYTHON`、`QWEN_MODEL_PATH`、`E5_MODEL_PATH` 设置
 环境检查验证依赖、CUDA 和本地模型文件，不加载模型权重
 首次完整启动需要加载 Qwen 并建立索引，耗时通常为数分钟
+界面相关的纯 Python 依赖已放入 `vendor/wheels/`，从本机现有环境整理，无需下载
+安装全部前端依赖时可同时指定 `--find-links vendor/wheels` 和自己的 NumPy、PyMuPDF wheel 目录
 
 ## 使用
 
-直接输入问题并回车
+直接输入即可普通聊天，使用模型自身知识并保留当前会话上下文
+Enter 发送，Alt+Enter 换行，Tab 补全命令，生成时 Ctrl+C 停止
+Ctrl+D 或 `/exit` 退出，`--plain` 使用纯文本界面
+聊天上下文只保存在内存，退出后不保留
 
 ```text
+/chat
+/rag
+/docs
+/docs all
+/docs 1
 /method bm25
 /method vector
+/new
 /sources
 /info
 /reindex
@@ -130,14 +146,20 @@ Windows 模型目录会转换为 WSL 路径
 ```
 
 把新的 UTF-8 文本或带文字层的 PDF 放入 `corpus/` 后执行 `/reindex`
-默认只检索 `HAGNN论文.pdf`
-要检索全部资料，将 `config.json` 的 `default_document` 设为空字符串
+`/rag` 进入文档模式，`/chat` 回到普通聊天
+文档模式初始范围为 `HAGNN论文.pdf`
+`/docs` 列出资料，`/docs all` 检索全部，`/docs 编号` 选择某份资料
+选择只影响当前会话，不改写本地配置
+文档问答不使用普通聊天历史，普通聊天也不会自动读取文档
+需要依据资料回答时请明确切换到文档模式
+`/model` 显示真实加载的权重目录，界面更换不改变 Dense 模型
 扫描页会提示先进行 OCR
 
 单次问答
 
 ```powershell
-.\start.ps1 --method vector --question "论文使用了哪四个数据集" --json
+.\start.ps1 --question "你是谁"
+.\start.ps1 --mode rag --method vector --question "论文使用了哪四个数据集" --json
 ```
 
 ## 评测数据
@@ -169,6 +191,7 @@ JSON 保留检索片段、追加上下文、提示词、模型原始输出与计
 这些结果属于同题诊断复测，不是独立测试集成绩
 
 在已经加载模型的 CLI 中输入 `/eval` 可重新评测
+评测固定使用启动配置中的文档范围，不受 `/docs` 和聊天历史影响
 新结果写入新的运行目录，不覆盖已提交的评分
 填写新评分后汇总
 
@@ -186,6 +209,7 @@ AI 代码错误及修正记录见 [AI_ERRORS.md](docs/AI_ERRORS.md)
 ```
 
 测试不加载生成模型
+新增会话测试覆盖多轮上下文、整轮裁剪、取消后续用、文档选择、评测范围恢复与聊天结束符
 启动检查与原始问答评测分别记录
 运行时日志、向量缓存和本地配置不会提交到 Git
 

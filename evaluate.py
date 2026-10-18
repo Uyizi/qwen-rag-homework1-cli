@@ -67,7 +67,7 @@ def run_with_engine(engine, questions):
               "evaluation_role": "post-fix retest on the same approved questions"}
     (folder / "environment.json").write_text(json.dumps(status, ensure_ascii=False, indent=2), encoding="utf-8")
     (folder / "implementation").mkdir()
-    for name in ["rag.py", "model_worker.py", "evaluate.py", "config.json", "pdf_structure.py", "evidence_checks.py"]:
+    for name in ["rag.py", "model_worker.py", "chat_session.py", "evaluate.py", "config.json", "pdf_structure.py", "evidence_checks.py"]:
         shutil.copy2(ROOT / name, folder / "implementation" / name)
     review = []
     # 交替执行两种检索
