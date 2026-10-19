@@ -11,6 +11,6 @@
   "default_document": "HAGNN论文.pdf",
   "exclude_references": true,
   "translate_queries": true,
-  "implementation_version": "structured-tables-citation-only-v4.3",
+  "implementation_version": "structured-tables-citation-only-v4.4-frontmatter",
   "neighbor_chunks": 1
 }

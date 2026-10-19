@@ -39,6 +39,19 @@ def explicit_context(units, question):
     symbols = set(re.findall(r"[\u0370-\u03ff]", question))
     main, subsection = {}, {}
     chosen, by_section = [], {}
+    if re.search(r"作者|署名|标题|题名|机构|单位|所属|来自哪|\b(?:authors?|title|affiliations?|institution)\b|who\s+(?:wrote|authored)", question, re.I):
+        documents = {}
+        for unit in units:
+            if unit.get("kind") != "table" and unit.get("section") != "references":
+                documents.setdefault(unit["file"], []).append(unit)
+        for rows in documents.values():
+            first_page = rows[0].get("location")
+            for unit in rows[:4]:
+                if unit.get("location") != first_page:
+                    break
+                chosen.append(unit)
+                if re.search(r"(?im)^\s*(?:abstract\b|摘要|(?:I|1)[.、]\s*(?:introduction|引言|绪论)|#{1,2}\s)", unit["text"]):
+                    break
     for unit in units:
         if unit.get("kind") == "table" or unit.get("section") == "references":
             continue

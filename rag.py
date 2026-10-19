@@ -404,7 +404,7 @@ class Engine:
             if guard:
                 response = {"text": "", "seconds": 0, "output_tokens": 0}
                 final = guard
-            elif not hits:
+            elif not evidence:
                 response = {"text": "", "seconds": 0, "output_tokens": 0}
                 final = {"status": "refused", "answer": REFUSAL, "reason": "BM25 无匹配词", "citations": []}
             else:
