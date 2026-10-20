@@ -1,0 +1,33 @@
+{
+  "revision": "934cf7c59a3adbc9348757c613ddc987137d2b77",
+  "model": {
+    "ready": true,
+    "model": "/mnt/d/ai_project_data/qwen35_cloud/exports/Qwen3.5-4B-Dense-style-v1",
+    "embedding_model": "/mnt/d/ai_project_data/qwen35_cloud/base/multilingual-e5-small",
+    "embedding_dimension": 384,
+    "torch": "2.14.0+cu130",
+    "transformers": "5.17.0",
+    "python": "3.13.11",
+    "gpu": "NVIDIA GeForce RTX 5080 Laptop GPU",
+    "load_seconds": 111.019,
+    "dtype": "bfloat16",
+    "decoding": "greedy; thinking disabled"
+  },
+  "configuration": {
+    "wsl_python": "/home/uyizi/ai_project/.venv-qwen35/bin/python",
+    "generation_model": "/mnt/d/ai_project_data/qwen35_cloud/exports/Qwen3.5-4B-Dense-style-v1",
+    "embedding_model": "/mnt/d/ai_project_data/qwen35_cloud/base/multilingual-e5-small",
+    "chunk_chars": 420,
+    "overlap_chars": 60,
+    "top_k": 3,
+    "max_new_tokens": 768,
+    "default_document": "AHGNN论文.pdf",
+    "exclude_references": true,
+    "translate_queries": true,
+    "implementation_version": "structured-tables-citation-only-v4.5-metadata-isolation",
+    "neighbor_chunks": 1
+  },
+  "purpose": "扩展开发诊断 含改写与组合题 不是独立盲测 不修改原20题",
+  "semantic_scoring": "pending AI review against source",
+  "attempts_per_question_method": 1
+}

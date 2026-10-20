@@ -1,0 +1,61 @@
+{
+  "vector_shape": [
+    76,
+    384
+  ],
+  "norm_min": 0.9999998807907104,
+  "norm_max": 1.0000001192092896,
+  "header_fresh_cached_cosine": 1.0,
+  "queries": [
+    {
+      "query": "Chenjie Yin Xi’an Jiaotong University",
+      "header_rank": 11,
+      "top3": [
+        "AHGNN论文.pdf::c036",
+        "AHGNN论文.pdf::tV",
+        "AHGNN论文.pdf::tIV"
+      ],
+      "labelled_header_shadow_rank": 1
+    },
+    {
+      "query": "Who is the author of this article and where are they from?",
+      "header_rank": 7,
+      "top3": [
+        "AHGNN论文.pdf::c032",
+        "AHGNN论文.pdf::c036",
+        "AHGNN论文.pdf::tII"
+      ],
+      "labelled_header_shadow_rank": 1
+    },
+    {
+      "query": "这篇文章的作者是谁，来自哪里",
+      "header_rank": 10,
+      "top3": [
+        "AHGNN论文.pdf::tV",
+        "AHGNN论文.pdf::tI",
+        "AHGNN论文.pdf::tVI"
+      ],
+      "labelled_header_shadow_rank": 1
+    },
+    {
+      "query": "What is the title of this paper?",
+      "header_rank": 26,
+      "top3": [
+        "AHGNN论文.pdf::tII",
+        "AHGNN论文.pdf::c007",
+        "AHGNN论文.pdf::tVI"
+      ],
+      "labelled_header_shadow_rank": 1
+    },
+    {
+      "query": "contact email author affiliation university",
+      "header_rank": 12,
+      "top3": [
+        "AHGNN论文.pdf::c036",
+        "AHGNN论文.pdf::tVI",
+        "AHGNN论文.pdf::tV"
+      ],
+      "labelled_header_shadow_rank": 1
+    }
+  ]
+}

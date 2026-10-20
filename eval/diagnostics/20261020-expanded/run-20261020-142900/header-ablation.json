@@ -1,0 +1,51 @@
+{
+  "purpose": "分别控制署名区分离与字段标签 仅离线检索对照 未改运行索引",
+  "cached_original_cosine": 1.0,
+  "queries": [
+    {
+      "query": "Chenjie Yin Xi’an Jiaotong University",
+      "ranks": {
+        "original_full": 11,
+        "byline_only": 1,
+        "full_with_labels": 1,
+        "byline_with_labels": 1
+      }
+    },
+    {
+      "query": "Who is the author of this article and where are they from?",
+      "ranks": {
+        "original_full": 7,
+        "byline_only": 1,
+        "full_with_labels": 4,
+        "byline_with_labels": 1
+      }
+    },
+    {
+      "query": "这篇文章的作者是谁，来自哪里",
+      "ranks": {
+        "original_full": 10,
+        "byline_only": 1,
+        "full_with_labels": 4,
+        "byline_with_labels": 1
+      }
+    },
+    {
+      "query": "What is the title of this paper?",
+      "ranks": {
+        "original_full": 26,
+        "byline_only": 2,
+        "full_with_labels": 15,
+        "byline_with_labels": 1
+      }
+    },
+    {
+      "query": "contact email author affiliation university",
+      "ranks": {
+        "original_full": 12,
+        "byline_only": 1,
+        "full_with_labels": 2,
+        "byline_with_labels": 1
+      }
+    }
+  ]
+}

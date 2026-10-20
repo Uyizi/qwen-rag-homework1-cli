@@ -1,0 +1,42 @@
+{
+  "scope": "24题扩展开发诊断，含改写、组合和对抗题，不是独立盲测，不覆盖原20题成绩",
+  "scoring_source": "AI逐条核对48条回答和实际引用原文，非独立人工盲评",
+  "rubric": "回答完整、事实正确、引用支持才计对；资料不足正确拒答计对；有明确否定事实却拒答计错；输出说明与最终状态分开记录",
+  "reference_annotation": "使用questions-reviewed.json中的等价证据标注；原始题集与原始模型输出均保留",
+  "methods": {
+    "bm25": {
+      "correct": 17,
+      "total": 24,
+      "accuracy": 0.7083333333333334,
+      "answerable_n": 21,
+      "raw_hit_any": 18,
+      "raw_hit_all": 18,
+      "generation_hit_all": 21,
+      "false_refusal_with_evidence": 6,
+      "reader_hallucination": 1,
+      "retrieval_miss": 0,
+      "unknown_refusal_correct": 2,
+      "unknown_n": 2,
+      "mean_latency_seconds": 7.2194416666666665,
+      "cross_document_full_citation": 0,
+      "cross_document_n": 1
+    },
+    "vector": {
+      "correct": 16,
+      "total": 24,
+      "accuracy": 0.6666666666666666,
+      "answerable_n": 21,
+      "raw_hit_any": 17,
+      "raw_hit_all": 17,
+      "generation_hit_all": 20,
+      "false_refusal_with_evidence": 6,
+      "reader_hallucination": 1,
+      "retrieval_miss": 1,
+      "unknown_refusal_correct": 2,
+      "unknown_n": 2,
+      "mean_latency_seconds": 7.187383333333334,
+      "cross_document_full_citation": 0,
+      "cross_document_n": 1
+    }
+  }
+}
