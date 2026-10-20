@@ -119,7 +119,7 @@ class CommandTests(unittest.TestCase):
     def test_modes_and_docs(self):
         reads = iter(["/docs", "/docs all", "/method vector", "资料问题", "/chat", "通用问题", "/clear", "/exit"])
         outputs, calls = [], []
-        ui = SimpleNamespace(read=lambda label: next(reads),
+        ui = SimpleNamespace(read=lambda: next(reads),
                              print=lambda text="", **kwargs: outputs.append(text))
         engine = SimpleNamespace(metadata={"model": "/model/dense"},
                                  cfg={"default_document": "paper.pdf"},

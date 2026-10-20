@@ -35,10 +35,19 @@ class TerminalUI:
         else:
             print(text, flush=True)
 
-    def read(self, label):
+    def read(self):
+        self.print()
         if self.rich:
-            return self.prompt.prompt(f"你 · {label} › ").strip()
-        return input(f"你 · {label} > ").strip()
+            return self.prompt.prompt("› ").strip()
+        return input("> ").strip()
+
+    @contextmanager
+    def busy(self, message, enabled=True):
+        if self.rich and enabled:
+            with self.console.status(message, spinner="dots") as status:
+                yield status.update
+        else:
+            yield lambda message: None
 
     def push(self, text):
         self.buffer += text
@@ -48,16 +57,26 @@ class TerminalUI:
     @contextmanager
     def answer(self):
         self.buffer = ""
-        self.print("\nQwen", dim=True)
+        self.print()
         if self.rich:
             from rich.live import Live
             from rich.markdown import Markdown
-            with Live(console=self.console, get_renderable=lambda: Markdown(self.buffer or "…"),
-                      refresh_per_second=12, transient=True, vertical_overflow="crop"):
-                yield self.push
-            if self.buffer:
-                self.console.print(Markdown(self.buffer))
+            try:
+                with Live(console=self.console, get_renderable=lambda: Markdown(self.buffer or "…"),
+                          refresh_per_second=12, transient=True, vertical_overflow="crop"):
+                    yield self.push
+            finally:
+                if self.buffer:
+                    self.console.print(Markdown(self.buffer))
         else:
-            yield self.push
-            print()
-        self.print()
+            try:
+                yield self.push
+            finally:
+                print()
+
+    def markdown(self, text):
+        if self.rich:
+            from rich.markdown import Markdown
+            self.console.print(Markdown(text))
+        else:
+            self.print(text)

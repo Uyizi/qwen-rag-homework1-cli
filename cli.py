@@ -25,13 +25,14 @@ HELP = """直接输入即可连续聊天 Enter 发送 Alt+Enter 换行 Tab 补�
 
 
 def show_answer(result, ui):
-    labels = {"answered": "Qwen · 文档", "refused": "Qwen · 资料不足", "rejected": "Qwen · 校验失败"}
-    ui.print(f"\n{labels[result['status']]}\n{result['answer']}")
+    ui.print()
+    if result["status"] == "rejected":
+        ui.print("回答校验失败")
+    ui.markdown(result["answer"])
     if result["reason"]:
         ui.print("说明：" + result["reason"])
     for index, citation in enumerate(result["citations"], 1):
         ui.print(f"出处 {index}：{citation['file']} · {citation['location']}", dim=True)
-    ui.print(f"{result['latency_seconds']:.2f} 秒 · /sources 查看检索原文\n", dim=True)
 
 
 def show_sources(result, ui, argument=""):
@@ -56,8 +57,8 @@ def show_sources(result, ui, argument=""):
 
 def answer(session, question, ui):
     if session.mode == "rag":
-        ui.print("检索资料中…", dim=True)
-        result = session.ask(question, lambda text: None)
+        with ui.busy("正在检索资料…"):
+            result = session.ask(question, lambda text: None)
         show_answer(result, ui)
         return result
     with ui.answer() as on_text:
@@ -73,15 +74,10 @@ def answer(session, question, ui):
 
 def interact(engine, args, ui):
     session = ChatSession(engine, args.mode, args.method)
-    ui.print("\n知据 · 本地 Qwen")
-    ui.print(f"模型 {engine.metadata['model'].rsplit('/', 1)[-1]}", dim=True)
-    ui.print("Enter 发送 · Alt+Enter 换行 · Ctrl+C 停止 · /help 命令", dim=True)
-    ui.print("默认普通聊天 · /rag 文档问答 · /docs 选择资料\n", dim=True)
     last = None
     while True:
-        label = "聊天" if session.mode == "chat" else f"文档 {session.method}"
         try:
-            text = ui.read(label)
+            text = ui.read()
         except EOFError:
             break
         except KeyboardInterrupt:
@@ -167,8 +163,9 @@ def main():
         parser.error("--json 需要配合 --question")
     engine = None
     try:
-        engine = Engine(lambda message: print(message, file=sys.stderr, flush=True))
         ui = TerminalUI(args.plain)
+        with ui.busy("正在加载模型…", enabled=not args.json) as update:
+            engine = Engine(update)
         if args.question:
             session = ChatSession(engine, args.mode, args.method)
             if args.json:

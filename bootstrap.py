@@ -72,7 +72,7 @@ def decode_output(data):
         return data.decode("gb18030", errors="replace")
 
 
-def check_backend(config):
+def check_backend(config, verbose=True):
     script = """import json,sys
 from pathlib import Path
 import torch,transformers
@@ -96,7 +96,8 @@ print(json.dumps({'python':sys.version.split()[0],'torch':torch.__version__,'tra
         raise RuntimeError(stderr.strip() or stdout.strip() or "WSL 环境检查失败")
     if stderr.strip():
         print(stderr.strip(), file=sys.stderr)
-    print(stdout.strip())
+    if verbose:
+        print(stdout.strip())
 
 
 def main():
@@ -109,7 +110,7 @@ def main():
     try:
         config = prepare_config(args.configure)
         check_frontend(args.wheel_dir)
-        check_backend(config)
+        check_backend(config, verbose=args.check)
         if args.check:
             print("环境检查通过 未加载模型权重")
             return 0
