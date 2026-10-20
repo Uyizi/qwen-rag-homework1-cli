@@ -21,3 +21,8 @@
 `auto_hit_all` 仅看 Top-3
 `context_hit_all` 包含追加上下文
 两个指标不能混用
+
+当前资料文件名为 `AHGNN论文.pdf`
+历史运行记录保留旧文件名 `HAGNN论文.pdf`
+当前题集只更正来源编号，问题、标准答案与原评分不变
+文件名与编号映射见 `document-rename.json`

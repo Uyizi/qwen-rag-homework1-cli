@@ -8,9 +8,9 @@
   "max_new_tokens": 768,
   "chat_max_new_tokens": 1024,
   "chat_context_tokens": 8192,
-  "default_document": "HAGNN论文.pdf",
+  "default_document": "AHGNN论文.pdf",
   "exclude_references": true,
   "translate_queries": true,
-  "implementation_version": "structured-tables-citation-only-v4.4-frontmatter",
+  "implementation_version": "structured-tables-citation-only-v4.5-metadata-isolation",
   "neighbor_chunks": 1
 }

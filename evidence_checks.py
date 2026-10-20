@@ -33,25 +33,41 @@ def remap_evidence_ids(raw, aliases):
     return json.dumps(obj, ensure_ascii=False)
 
 
+def document_metadata_context(units, question):
+    if not re.search(r"作者|署名|标题|题名|机构|单位|所属|来自哪|籍贯|出生地|\b(?:authors?|title|affiliations?|institution)\b|who\s+(?:wrote|authored)", question, re.I):
+        return []
+    documents = {}
+    for unit in units:
+        if unit.get("kind") != "table" and unit.get("section") != "references":
+            documents.setdefault(unit["file"], []).append(unit)
+    chosen = []
+    for rows in documents.values():
+        first_page = rows[0].get("location")
+        for unit in rows[:4]:
+            if unit.get("location") != first_page:
+                break
+            chosen.append(unit)
+            if re.search(r"(?im)^\s*(?:abstract\b|摘要|(?:I|1)[.、]\s*(?:introduction|引言|绪论)|#{1,2}\s)", unit["text"]):
+                break
+    return chosen
+
+
+def is_metadata_only_question(question):
+    return bool(re.search(r"作者|署名|标题|题名|机构|单位|所属|来自哪|籍贯|出生地|\b(?:authors?|title|affiliations?|institution)\b|who\s+(?:wrote|authored)", question, re.I)) and not re.search(
+        r"训练|实验|数据集|准确率|复杂度|算法|参数|均值|标准差|表\s*[IVX\d]|图\s*\d|\b(?:GPU|VRAM|BFS|accuracy|AUC|Table|Figure|training|experiment|dataset)\b", question, re.I)
+
+
+def metadata_evidence_text(unit):
+    marker = re.search(r"(?im)^\s*(?:abstract\b|摘要|(?:I|1)[.、]\s*(?:introduction|引言|绪论))", unit["text"])
+    return unit["text"][:marker.start()].strip() if marker else unit["text"]
+
+
 def explicit_context(units, question):
 
     requested_sections = set(re.findall(r"\b([IVX]+)[-–.]([A-Z])(?![A-Za-z])", question))
     symbols = set(re.findall(r"[\u0370-\u03ff]", question))
     main, subsection = {}, {}
-    chosen, by_section = [], {}
-    if re.search(r"作者|署名|标题|题名|机构|单位|所属|来自哪|\b(?:authors?|title|affiliations?|institution)\b|who\s+(?:wrote|authored)", question, re.I):
-        documents = {}
-        for unit in units:
-            if unit.get("kind") != "table" and unit.get("section") != "references":
-                documents.setdefault(unit["file"], []).append(unit)
-        for rows in documents.values():
-            first_page = rows[0].get("location")
-            for unit in rows[:4]:
-                if unit.get("location") != first_page:
-                    break
-                chosen.append(unit)
-                if re.search(r"(?im)^\s*(?:abstract\b|摘要|(?:I|1)[.、]\s*(?:introduction|引言|绪论)|#{1,2}\s)", unit["text"]):
-                    break
+    chosen, by_section = document_metadata_context(units, question), {}
     for unit in units:
         if unit.get("kind") == "table" or unit.get("section") == "references":
             continue

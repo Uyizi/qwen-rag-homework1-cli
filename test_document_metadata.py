@@ -45,7 +45,7 @@ class DocumentMetadataTests(unittest.TestCase):
         def generate(**request):
             calls.append(request)
             evidence = json.loads(request["messages"][1]["content"])["证据"]
-            self.assertEqual([e["text"] for e in evidence], [header["text"]])
+            self.assertEqual([e["text"] for e in evidence], [header["text"].split("\nAbstract")[0]])
             return {"text": json.dumps({"answerable": True, "answer": evidence[0]["text"],
                                         "citations": [{"id": evidence[0]["id"]}], "missing": []})}
 
@@ -61,15 +61,55 @@ class DocumentMetadataTests(unittest.TestCase):
     def test_real_imported_paper_has_header_in_both_retrieval_paths(self):
         chunks = json.loads((rag.ROOT / "artifacts/chunks.json").read_text(encoding="utf-8"))
         engine = object.__new__(rag.Engine)
-        engine.cfg = {"default_document": "HAGNN论文.pdf", "neighbor_chunks": 0}
+        engine.cfg = {"default_document": "AHGNN论文.pdf", "neighbor_chunks": 0}
         engine.chunks = chunks
-        unrelated = next(c for c in chunks if c["file"] == "HAGNN论文.pdf" and c["chunk"] == 30)
+        unrelated = next(c for c in chunks if c["file"] == "AHGNN论文.pdf" and c["chunk"] == 30)
         for hits in [[], [unrelated]]:
             context = engine.expand_evidence(hits, "这篇文章的作者是谁，来自哪里")
-            headers = [u for u in context if u["id"] == "HAGNN论文.pdf::c001"]
+            headers = [u for u in context if u["id"] == "AHGNN论文.pdf::c001"]
             self.assertEqual(len(headers), 1)
             self.assertIn("Chenjie Yin", headers[0]["text"])
             self.assertIn("Jiaotong University", headers[0]["text"])
+
+
+class MetadataIsolationTests(unittest.TestCase):
+    def test_compound_question_sends_only_byline_and_uses_short_prompt(self):
+        header = unit("header", "An Adaptive Method\nMina Park\nExample Institute\nAbstract—Noise after the byline.")
+        noise = unit("noise", "Formula and irrelevant experiment " * 80, location="第 3 页", chunk=10)
+        engine = object.__new__(rag.Engine)
+        engine.cfg = {"default_document": "sample.pdf", "max_new_tokens": 128, "neighbor_chunks": 1}
+        engine.chunks = [header, noise]
+        engine.lock = threading.Lock()
+        engine.prepare_query = lambda question: {"query": "Who and where?", "status": "translated"}
+        engine.retrieve = lambda question, method: [noise]
+        requests = []
+
+        def generate(**request):
+            requests.append(request)
+            data = json.loads(request["messages"][1]["content"])
+            evidence = data["证据"]
+            self.assertEqual(len(evidence), 1)
+            self.assertEqual(evidence[0]["text"], "An Adaptive Method\nMina Park\nExample Institute")
+            self.assertNotIn("标准差", request["messages"][0]["content"])
+            return {"text": json.dumps({"answerable": True, "answer": "Mina Park，Example Institute",
+                                        "citations": [{"id": evidence[0]["id"]}], "missing": []})}
+
+        engine.worker = SimpleNamespace(call=generate)
+        with tempfile.TemporaryDirectory() as folder, patch.object(rag, "ROOT", Path(folder)):
+            result = engine.ask("论文作者是谁，来自哪里", "bm25")
+        self.assertEqual(result["status"], "answered")
+        self.assertEqual(result["hits"][0]["id"], "noise")
+        self.assertEqual(result["generation_evidence_ids"], ["header"])
+        self.assertEqual(result["citations"][0]["quote"], header["text"])
+        self.assertEqual(len(requests), 1)
+
+    def test_author_plus_experiment_question_keeps_normal_evidence_path(self):
+        detect = getattr(rag, "is_metadata_only_question", None)
+        self.assertIsNotNone(detect, "缺少元信息专用路径判断")
+        self.assertTrue(detect("论文作者是谁，来自哪里"))
+        self.assertTrue(detect("作者的籍贯在哪里"))
+        self.assertFalse(detect("作者是谁，训练用了哪款GPU"))
+        self.assertFalse(detect("作者如何选择实验数据集"))
 
 
 if __name__ == "__main__":

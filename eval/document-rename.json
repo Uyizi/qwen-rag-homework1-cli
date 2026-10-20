@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-20",
+  "old_document": "HAGNN论文.pdf",
+  "current_document": "AHGNN论文.pdf",
+  "id_prefix_mapping": {
+    "HAGNN论文.pdf::": "AHGNN论文.pdf::"
+  },
+  "question_text_and_answers_changed": false,
+  "historical_results_changed": false,
+  "reason": "更正运行文件名 仅更新当前配置与题集证据编号 历史运行保留原编号"
+}
