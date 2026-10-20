@@ -1,0 +1,24 @@
+{
+  "release": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/tag/models-v1",
+  "anonymous_download": true,
+  "download_resume_tests": 7,
+  "bootstrap_tests": 11,
+  "model_weights_loaded": false,
+  "checks": [
+    {
+      "model": "Qwen3.5-4B-Dense-style-v1",
+      "config_bytes": 2938,
+      "model_type": "qwen3_5"
+    },
+    {
+      "model": "multilingual-e5-small",
+      "config_bytes": 655,
+      "model_type": "bert"
+    },
+    {
+      "shard": "model-00001-of-00005.safetensors",
+      "anonymous_range_download": "passed",
+      "bytes_read": 16
+    }
+  ]
+}

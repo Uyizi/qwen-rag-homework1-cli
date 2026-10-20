@@ -1,0 +1,143 @@
+{
+  "release": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/tag/models-v1",
+  "models": [
+    {
+      "key": "generation_model",
+      "folder": "Qwen3.5-4B-Dense-style-v1",
+      "files": [
+        {
+          "path": "chat_template.jinja",
+          "size": 7756,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--chat_template.jinja",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114660"
+        },
+        {
+          "path": "config.json",
+          "size": 2938,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--config.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114705"
+        },
+        {
+          "path": "generation_config.json",
+          "size": 116,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--generation_config.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659115141"
+        },
+        {
+          "path": "merged_provenance.json",
+          "size": 222,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--merged_provenance.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659115019"
+        },
+        {
+          "path": "model-00001-of-00005.safetensors",
+          "size": 1996138368,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--model-00001-of-00005.safetensors",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659029150"
+        },
+        {
+          "path": "model-00002-of-00005.safetensors",
+          "size": 1995160352,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--model-00002-of-00005.safetensors",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659029162"
+        },
+        {
+          "path": "model-00003-of-00005.safetensors",
+          "size": 1968944944,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--model-00003-of-00005.safetensors",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659029157"
+        },
+        {
+          "path": "model-00004-of-00005.safetensors",
+          "size": 1963297576,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--model-00004-of-00005.safetensors",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659094004"
+        },
+        {
+          "path": "model-00005-of-00005.safetensors",
+          "size": 1155078448,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--model-00005-of-00005.safetensors",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659096342"
+        },
+        {
+          "path": "model.safetensors.index.json",
+          "size": 66236,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--model.safetensors.index.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114571"
+        },
+        {
+          "path": "tokenizer.json",
+          "size": 19989325,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--tokenizer.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659113152"
+        },
+        {
+          "path": "tokenizer_config.json",
+          "size": 1123,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--tokenizer_config.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114743"
+        },
+        {
+          "path": "LICENSE",
+          "size": 11357,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/qwen--LICENSE",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114634"
+        }
+      ]
+    },
+    {
+      "key": "embedding_model",
+      "folder": "multilingual-e5-small",
+      "files": [
+        {
+          "path": "config.json",
+          "size": 655,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--config.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114834"
+        },
+        {
+          "path": "model.safetensors",
+          "size": 470641600,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--model.safetensors",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659098873"
+        },
+        {
+          "path": "README.md",
+          "size": 497538,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--README.md",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114491"
+        },
+        {
+          "path": "sentencepiece.bpe.model",
+          "size": 5069051,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--sentencepiece.bpe.model",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114362"
+        },
+        {
+          "path": "special_tokens_map.json",
+          "size": 167,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--special_tokens_map.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659115061"
+        },
+        {
+          "path": "tokenizer.json",
+          "size": 17082730,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--tokenizer.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114113"
+        },
+        {
+          "path": "tokenizer_config.json",
+          "size": 443,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--tokenizer_config.json",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114945"
+        },
+        {
+          "path": "LICENSE",
+          "size": 1104,
+          "url": "https://github.com/Uyizi/qwen-rag-homework1-cli/releases/download/models-v1/e5--LICENSE",
+          "api_url": "https://api.github.com/repos/Uyizi/qwen-rag-homework1-cli/releases/assets/659114786"
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+from model_download import ensure_models
+from setup_runtime import direct_environment, prepare_backend
+
 ROOT = Path(__file__).resolve().parent
 PATH_KEYS = ("wsl_python", "generation_model", "embedding_model")
 
@@ -29,36 +32,40 @@ def validate_config(config):
     return result
 
 
-def prepare_config(configure=False):
+def prepare_config(configure=False, check_only=False):
     path = ROOT / "config.json"
     config = json.loads((path if path.exists() else ROOT / "config.example.json").read_text(encoding="utf-8"))
     variables = {"wsl_python": "QWEN_WSL_PYTHON", "generation_model": "QWEN_MODEL_PATH", "embedding_model": "E5_MODEL_PATH"}
     for key, variable in variables.items():
         if os.environ.get(variable):
             config[key] = os.environ[variable]
-    if configure or any(not config.get(key) for key in PATH_KEYS):
+    if configure:
         if not sys.stdin.isatty():
             raise ValueError("先运行 bootstrap.py --configure 或设置三个模型路径环境变量")
         labels = {"wsl_python": "WSL Python 路径", "generation_model": "本地 Qwen 模型目录", "embedding_model": "本地 E5 模型目录"}
         for key in PATH_KEYS:
             current = config.get(key, "")
             config[key] = input(f"{labels[key]} [{current}]: ").strip() or current
+    if not check_only:
+        if not config.get("wsl_python"):
+            config["wsl_python"] = prepare_backend(ROOT / "requirements-backend.txt")
+        config = ensure_models(ROOT, config)
     config = validate_config(config)
     path.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return config
 
 
-def check_frontend(wheel_dir=None):
+def check_frontend(wheel_dir=None, check_only=False):
     missing = [name for name in ("numpy", "fitz", "rich", "prompt_toolkit") if importlib.util.find_spec(name) is None]
-    if missing and wheel_dir is None:
-        wheel_dir = ROOT / "vendor" / "wheels"
-    if missing and wheel_dir:
-        wheels = Path(wheel_dir).resolve()
+    if missing and check_only:
+        raise ValueError("缺少前端依赖 请运行 启动.cmd 自动安装")
+    if missing:
+        wheels = Path(wheel_dir or ROOT / "vendor" / "wheels").resolve()
         if not wheels.is_dir():
             raise ValueError("离线 wheel 目录不存在")
-        subprocess.run([sys.executable, "-m", "pip", "install", "--no-index", "--find-links", str(wheels), "-r", str(ROOT / "requirements.txt")], check=True)
-    elif missing:
-        raise ValueError("缺少前端依赖 " + ", ".join(missing) + " 请按 README 离线安装或指定 --wheel-dir")
+        source = ["--no-index"] if wheel_dir else ["--index-url", "https://pypi.org/simple"]
+        subprocess.run([sys.executable, "-m", "pip", "install", "--only-binary=:all:", *source, "--find-links", str(wheels),
+                        "-r", str(ROOT / "requirements.txt")], check=True, env=direct_environment())
 
 
 def decode_output(data):
@@ -108,8 +115,10 @@ def main():
     args, cli_args = parser.parse_known_args()
     os.environ.update(PYTHONUTF8="1", HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", HF_HUB_DISABLE_TELEMETRY="1")
     try:
-        config = prepare_config(args.configure)
-        check_frontend(args.wheel_dir)
+        if not (3, 10) <= sys.version_info[:2] <= (3, 13):
+            raise ValueError("Windows 前端需要 Python 3.10至3.13 推荐安装3.13")
+        check_frontend(args.wheel_dir, check_only=args.check)
+        config = prepare_config(args.configure, check_only=args.check)
         check_backend(config, verbose=args.check)
         if args.check:
             print("环境检查通过 未加载模型权重")

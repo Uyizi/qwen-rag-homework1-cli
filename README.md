@@ -17,6 +17,9 @@ pdf_structure.py           PDF 表格恢复与数值计算
 evidence_checks.py         证据与条件校验
 model_worker.py            WSL 常驻模型进程
 bootstrap.py               路径配置与启动检查
+model_download.py          模型下载与断点续传
+setup_runtime.py           首次准备 WSL 环境
+model-manifest.json        模型版本 文件大小与下载地址
 config.example.json        配置模板
 requirements.txt           Windows 依赖
 requirements-backend.txt   WSL 后端依赖
@@ -33,16 +36,17 @@ vendor/wheels/             终端界面依赖的离线安装包及许可证
 ## 运行前提
 
 Windows 10 或 11、WSL2 和支持 CUDA 与 BF16 的 NVIDIA GPU
-Windows 和 WSL 中均需有 Python 环境
+Windows 安装 Python 3.10至3.13，推荐3.13
+WSL Linux 中安装 Python 3.10以上及 python3-venv，NVIDIA 驱动需支持 CUDA 13以上
+启动器会选择已安装的受支持 Python，不会因同时安装3.14而误选
+建议16GB显存，首次准备至少25GB空闲磁盘
 
-需要提前准备本地 Qwen 和 multilingual-e5-small 模型文件
-原评测使用个人导出的 Qwen3.5-4B-Dense-style-v1
-权重体积较大，不包含在代码仓库中
-使用其他兼容权重可以运行，但不会保证复现本仓库的评分
-
-一键启动指依赖和本地权重准备完成后双击启动
-首次启动填写三个路径，之后自动复用本地配置
-程序不自动下载模型、依赖或调用云端 API
+满足以上前提后，解压项目并双击 `启动.cmd`
+首次启动自动创建环境、安装依赖并从 [GitHub Release](https://github.com/Uyizi/qwen-rag-homework1-cli/releases/tag/models-v1) 下载本次使用的 Qwen 和 E5 权重
+模型共约9.6GB，保存在项目的 `models/` 中，中断后重新启动可续传
+后续启动复用本地环境和模型，不再下载，不调用云端推理 API
+已在 `config.json` 配置本地模型和 WSL Python 时继续使用原配置
+一键启动不包含安装 Windows Python、WSL、Linux 系统或显卡驱动
 
 ## 实测环境
 
@@ -73,40 +77,34 @@ git clone https://github.com/Uyizi/qwen-rag-homework1-cli.git
 cd qwen-rag-homework1-cli
 ```
 
-创建 Windows 虚拟环境并从已经准备好的 wheel 目录安装依赖
-将 D:\wheels 替换为本机实际目录
+下载源码 ZIP 后解压也可以，不必安装 Git
+双击 `启动.cmd` 或在 PowerShell 运行
 
 ```powershell
+.\start.ps1
+```
+
+启动器自动创建 Windows `.venv` 和 WSL `~/.local/share/qwen-rag-homework1/venv`
+依赖版本见 `requirements.txt` 和 `requirements-backend.txt`
+依赖安装清除代理环境变量，模型下载显式禁用系统代理
+系统级 VPN 若接管全部网络流量，需先自行关闭，否则应用无法保证绕过它
+
+需要完全离线安装时，提前准备全部 wheel 和模型文件，再按下面方式安装 Windows 依赖
+
+```bash
 py -3 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --no-index --find-links D:\wheels -r requirements.txt
 ```
 
-WSL 使用已有兼容环境时可以跳过后端安装
-新建环境时先在 WSL 中切换到克隆目录，再从本地 wheel 安装匹配的 CUDA 依赖
-requirements-backend.txt 记录原评测使用的后端版本
-安装前需准备对应 Python 与 CUDA 版本的全部依赖 wheel
-
-```bash
-python3 -m venv ~/venvs/qwen-rag
-~/venvs/qwen-rag/bin/python -m pip install --no-index --find-links /path/to/wheels -r requirements-backend.txt
-```
-
-若需要联网取得 wheel 或模型文件，请先在不经过 VPN 的网络中准备文件
-本仓库中的安装命令只读取本地文件
+离线模型放在清单指定的 `models/` 子目录，或在 `config.json` 指定已有模型路径
 
 ## 一键启动
 
 双击 `启动.cmd`
 
-首次启动依次填写
-
-1. WSL Python 路径，例如 `/home/你的用户名/venvs/qwen-rag/bin/python`
-2. 本地 Qwen 模型目录，例如 `D:\Models\Qwen3.5-4B-Dense-style-v1`
-3. 本地 E5 目录，例如 `D:\Models\multilingual-e5-small`
-
-Windows 模型目录会转换为 WSL 路径
-配置保存在被 Git 忽略的 `config.json` 中
-也可以复制 `config.example.json` 后手动填写三个路径
+首次运行自动确定模型与环境路径，配置保存在被 Git 忽略的 `config.json` 中
+`--configure` 可手动指定自己的三个路径
+使用其他兼容权重可以运行，但不能保证复现本仓库的评分
 
 在终端中启动或仅检查环境
 
@@ -118,9 +116,12 @@ Windows 模型目录会转换为 WSL 路径
 
 路径也可以通过 `QWEN_WSL_PYTHON`、`QWEN_MODEL_PATH`、`E5_MODEL_PATH` 设置
 环境检查验证依赖、CUDA 和本地模型文件，不加载模型权重
-首次完整启动需要加载 Qwen 并建立索引，耗时通常为数分钟
+`--check` 不安装依赖或下载模型，首次准备完成后再使用
+模型下载和依赖安装完成后，首次加载 Qwen 并建立索引通常还需要数分钟
 界面相关的纯 Python 依赖已放入 `vendor/wheels/`，从本机现有环境整理，无需下载
-安装全部前端依赖时可同时指定 `--find-links vendor/wheels` 和自己的 NumPy、PyMuPDF wheel 目录
+Qwen 基础模型遵循 Apache-2.0，E5 遵循 MIT，下载目录保留相应 LICENSE
+基础模型来源 [Qwen3.5-4B](https://modelscope.cn/models/Qwen/Qwen3.5-4B) 与 [multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small)
+下载按清单校验文件大小，TLS 保护传输，不反复扫描权重计算 SHA256
 
 ## 使用
 
